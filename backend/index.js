@@ -1,8 +1,18 @@
 import express from "express"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
-const app = express()
-dotenv.config()
+import cors from "cors"
+import cookieParser from "cookie-parser"
+import authRoute from "./routes/auth.js";
+import usersRoute from "./routes/usersmanage.js";
+
+
+
+const app = express();
+dotenv.config();
+app.set("View engine", "ejs");
+app.use(express.urlencoded({ extended: false }));
+
 
 const connect = async () =>{
     try {
@@ -20,11 +30,18 @@ mongoose.connection.on("connected",()=>{
     console.log("mongoDB connected");
 })
 
-app.get("/users", (req,res)=>{
-    res.send("hello first req")
-})
+//middlewares
+app.use(cors());
+app.use(cookieParser());
+app.use(express.json());
+
+//routes
+app.use("/api/auth", authRoute); //FE-1
+app.use("/api/usersmanage", usersRoute); //FE-2 test
+
 
 app.listen(8800,()=>{
     connect()
     console.log("Connected to backend.")
 })
+
