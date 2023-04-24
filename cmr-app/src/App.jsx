@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Adminsystem from "./pages/Adminsystem";
 import Dashboard from "./components/Dashboard";
@@ -26,26 +26,37 @@ import Addprofile from "./components/Addprofile";
 import Paymentdetail from './emcomponents/Paymentdetail'
 import Mytasksdetail from "./emcomponents/Mytasksdetail";
 import Tasksem from './emcomponents/Tasksem'
-
+import { AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
 
 const App = () => {
 
+  const ProtectedRoute = ({ children }) => {
+    const { user } = useContext(AuthContext);
 
+    if (!user) {
+      return <Navigate to="/login" />;
+    }
+
+    return children;
+  };
 
   
   return (
     <BrowserRouter>
       <Routes>
         
-          <Route index path="/th" element={<Home />} />
-          <Route  path=":lan" element={<Home />} />
+          {/* <Route index path="/th" element={<Home />} /> */}
+          <Route  path="/:lan" element={<Home />} />
       
-        <Route path="Listcar/:lan" element={<Listcar />} />
-        <Route path="Paymentconfirm/:lan" element={<Paymentconfirm />} />
-        <Route path="Rentconfirm/:lan" element={<Rentconfirm />} />
-        <Route path="Login" element={<Login />} />
+        <Route path="/Listcar/:lan" element={<Listcar />} />
+        <Route path="/Paymentconfirm/:lan" element={<Paymentconfirm />} />
+        <Route path="/Rentconfirm/:lan" element={<Rentconfirm />} />
         <Route path="*" element={<Error404 />} />
-        <Route path="/Adminsystem" element={<Adminsystem />}>
+
+{/* admin */}
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Adminsystem" element={<ProtectedRoute><Adminsystem /></ProtectedRoute>}>
           <Route path="" element={<Dashboard />} />
           <Route path="Taskdetail" element={<Taskdetail />} />
           <Route path="Historydetail" element={<Historydetail />} />
@@ -59,8 +70,14 @@ const App = () => {
           <Route path="Detailemployee" element={<Detailemployee />} />
         </Route>
 
-        <Route path="Login1" element={<Login1 />} />
-        <Route path="Adminsystem1" element={<Adminsystem1 />}>
+
+
+
+
+
+{/* sale */}
+        <Route path="/Login1" element={<Login1 />} />
+        <Route path="/Adminsystem1" element={<Adminsystem1 />}>
           <Route path="" element={<Payment />} />
           <Route path="Profile" element={<Profile />} />
           <Route path="Tasksem" element={<Tasksem />} />
