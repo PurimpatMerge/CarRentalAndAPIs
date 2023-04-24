@@ -8,7 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Image } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import Select from "@mui/material/Select";
-
+import axios from "axios";
 
 const Addcar = () => {
     const [images, setImages] = useState([]);
@@ -66,8 +66,10 @@ const Addcar = () => {
 
     const handleClick = async (e) => {
         try {
-
-            console.log(info)
+            const res = await axios.post("http://localhost:8800/api/car/addcar", info);
+            if(res){
+                // ให้ทำการ alert message
+            }
         } catch (err) {
             console.log(err);
         }
