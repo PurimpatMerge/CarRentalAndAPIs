@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/usersmanage.js";
+import carsRoute from "./routes/car.js";
 
 
 
@@ -38,6 +39,7 @@ app.use(express.json());
 //routes
 app.use("/api/auth", authRoute); //FE-1
 app.use("/api/usersmanage", usersRoute); //FE-2 test
+app.use("/api/car", carsRoute); //FE- unknow for car
 
 
 app.listen(8800,()=>{

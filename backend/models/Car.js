@@ -1,45 +1,53 @@
 import mongoose from "mongoose";
-const UserSchema = new mongoose.Schema(
+const CarInfoSchema = new mongoose.Schema(
   {
     photos: {
         type: [String],
         required: false,
       },
-    username: {
+    model: {
       type: String,
       required: true,
       unique: true,
     },
-    password: {
+    brand: {
       type: String,
       required: true,
     },
-    fname: {
+    year: {
       type: String,
       required: true,
     },
-    lname: {
+    lplate: {
       type: String,
       required: true,
     },
-    phone: {
+    seat: {
       type: String,
       required: true,
     },
-    email: {
+    door: {
       type: String,
       required: true,
     },
-    Position: {
-      type: Boolean,
-      default: false,
+    engine: {
+      type: String,
+      required: true,
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    gear: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("User", UserSchema);
+export default mongoose.model("CarInfo", CarInfoSchema);

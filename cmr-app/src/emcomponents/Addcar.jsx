@@ -9,6 +9,7 @@ import { Image } from 'antd';
 const Addcar = () => {
     const [images, setImages] = useState([]);
     const [imageURLs, setImageURLs] = useState([]);
+    const [info, setInfo] = useState({});
 
     useEffect(() => {
         if (images.length < 1) return;
@@ -22,7 +23,10 @@ const Addcar = () => {
     };
 
     
-
+    const handleChange = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+      };
+    
 
 
     const types = [
@@ -59,6 +63,14 @@ const Addcar = () => {
         { label: '5' },
     ]
 
+    const handleClick = async (e) => {
+        try {
+            console.log(info)
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
     return (
         <>
             <div className="container mx-auto sm:max-w-screen-md ">
@@ -66,7 +78,7 @@ const Addcar = () => {
                     <div className="bg-white bg-opacity-80 rounded-lg mx-4 my-4 px-10 sm:mx-10 sm:my-10">
                         <table class="table-auto mt-5 text-xs w-full sm:text-base  ">
                             <tr >
-                                <td className="sm:py-4"> Car Img: </td>
+                                <td className="sm:py-4"> Car Image: </td>
                                 <td>
                                     <IconButton color="primary" aria-label="upload picture" component="label">
                                         <input hidden accept="image/*" type="file" onChange={onImageChange} />
@@ -86,7 +98,7 @@ const Addcar = () => {
                             <tr >
                                 <td className="sm:py-5 ">ชื่อรุ่น:</td>
                                 <td>
-                                    <TextField id="" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
+                                    <TextField  onChange={handleChange} id="model" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
                                 </td>
                             </tr>
                             <tr>
@@ -94,8 +106,9 @@ const Addcar = () => {
                                 <td>
                                 <Autocomplete className="w-full bg-slate-100 bg-opacity-40"
                                         disablePortal
-                                        id=""
-                                        options={brand}                                       
+                                        id="brand"
+                                        options={brand}     
+                                        onChange={handleChange}                                  
                                         renderInput={(params) => <TextField {...params} label="Brand" />}
                                     />
                                 </td>
@@ -103,13 +116,13 @@ const Addcar = () => {
                             <tr >
                                 <td className="sm:py-5 ">ปี:</td>
                                 <td>
-                                    <TextField id="" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
+                                    <TextField  onChange={handleChange} id="year" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ป้ายทะเบียน:</td>
                                 <td>
-                                    <TextField id="" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
+                                    <TextField  onChange={handleChange} id="lplate" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
                                 </td>
                             </tr>
                             <tr>
@@ -117,8 +130,9 @@ const Addcar = () => {
                                 <td>
                                 <Autocomplete className="w-full bg-slate-100 bg-opacity-40"
                                         disablePortal
-                                        id=""
-                                        options={seat}                                       
+                                        id="seat"
+                                        options={seat}      
+                                        onChange={handleChange}                                 
                                         renderInput={(params) => <TextField {...params} label="Seat" />}
                                     />
                                 </td>
@@ -128,8 +142,9 @@ const Addcar = () => {
                                 <td >
                                 <Autocomplete className="w-full bg-slate-100 bg-opacity-40"
                                         disablePortal
-                                        id=""
-                                        options={door}                                       
+                                        id="door"
+                                        options={door}   
+                                        onChange={handleChange}                                    
                                         renderInput={(params) => <TextField {...params} label="Doors" />}
                                     />
                                     
@@ -138,7 +153,7 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ขนาดเครื่องยนต์:</td>
                                 <td >
-                                    <TextField id="" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
+                                    <TextField  onChange={handleChange} id="engine" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
                                 </td>
                             </tr>
                             <tr>
@@ -146,8 +161,9 @@ const Addcar = () => {
                                 <td>
                                     <Autocomplete className="w-full bg-slate-100 bg-opacity-40"
                                         disablePortal
-                                        id=""
-                                        options={gear}                                       
+                                        id="gear"
+                                        options={gear}    
+                                        onChange={handleChange}                                   
                                         renderInput={(params) => <TextField {...params} label="Gear" />}
                                     />
                                 </td>
@@ -157,8 +173,9 @@ const Addcar = () => {
                                 <td>
                                     <Autocomplete className="w-full bg-slate-100 bg-opacity-40"
                                         disablePortal
-                                        id=""
-                                        options={types}                                      
+                                        id="type"
+                                        options={types}   
+                                        onChange={handleChange}                                   
                                         renderInput={(params) => <TextField {...params} label="Type" />}
                                     />
                                 </td>
@@ -166,12 +183,12 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ราคาต่อวัน:</td>
                                 <td>
-                                    <TextField id="" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
+                                    <TextField  onChange={handleChange} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
                                 </td>
                             </tr>
                         </table>
                         <div className="float-right my-5">
-                            <Button className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
+                            <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
                         </div>
                     </div>
                 </div>
