@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState  } from 'react';
 import MaterialReactTable from 'material-react-table';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -9,8 +9,11 @@ import Switch from '@mui/material/Switch';
 import goodcat from '../img/oragoodcat.png'
 import nissanleaf from '../img/nissanleaft.jpg' 
 import hrvnobg from '../img/hrvnobg.png'
+import useFetch from "../hooks/useFetch";
+import axios from "axios";
+
 //nested data is ok, see accessorKeys in ColumnDef below
-const data = [
+const data2 = [
     {
         id: 1,
         img: <img src={car} alt="car" className='object-cover w-28 md:w-full ' />,
@@ -60,14 +63,6 @@ const data = [
 
     },
     {
-        id: 4,
-        img: <img src={hrvnobg} alt="goodcat" className='object-cover w-28 md:w-full ' />,
-        brand: 'Honda',
-        model: 'HRV',
-        year: '2017',
-        plate: 'กกน9212',
-        type: 'SUV',
-        price: '1800',
         status: <Switch  defaultChecked color="success" />,
         button: <div>
             <Link to="/Adminsystem1/Editcar"><Button variant="text">Edit</Button></Link>
@@ -79,9 +74,12 @@ const data = [
 ];
 
 const Carstable = () => {
-
+    const { data, loading, error } = useFetch("http://localhost:8800/api/car/allCar");
+    useEffect(() => {
+    }, [data]);
+  
     //should be memoized or stable
-    const columns = useMemo(
+    const columns2 = useMemo(
         () => [
             {
                 accessorKey: 'id', //access nested data with dot notation
@@ -137,8 +135,77 @@ const Carstable = () => {
         ],
         [],
     );
+    //should be memoized or stable
+    const columns = useMemo(
+        () => [
+          {
+            accessorKey: "_id",
+            header: "ID",
+            size: 5,
+          },
+          {
+            accessorKey: "photos",
+            header: "IMG",
+            size: 20,
+          },
+          {
+            accessorKey: "brand",
+            header: "Brand",
+            size: 10,
+          },
+          {
+            accessorKey: "model",
+            header: "Model",
+            size: 10,
+          },
+          {
+            accessorKey: "year",
+            header: "Year",
+            size: 10,
+          },
+          {
+            accessorKey: "lplate",
+            header: "License Plate",
+            size: 10,
+          },
+          {
+            accessorKey: "type",
+            header: "Type",
+            size: 10,
+          },
+          {
+            accessorKey: "price",
+            header: "Price",
+            size: 10,
+          },
+          {
+            accessorKey: "status",
+            header: "Status",
+            size: 10,
+            Cell: ({ row }) => (
+              <Switch defaultChecked color="success" />
+            ),
+          },
+          {
+            accessorKey: "button",
+            header: "Action",
+            size: 5,
+            Cell: ({ row }) => (
+              <div>
+                <Link to={`/Adminsystem1/Editcar/${row._id}`}>
+                  <Button variant="text">Edit</Button>
+                </Link>
+                <IconButton aria-label="delete" color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            ),
+          },
+        ],
+        []
+      );
 
-    return <MaterialReactTable  columns={columns} data={data} />;
+    return <div><MaterialReactTable  columns={columns2} data={data2} /> <MaterialReactTable  columns={columns} data={data} /></div>;
 };
 
 export default Carstable;
