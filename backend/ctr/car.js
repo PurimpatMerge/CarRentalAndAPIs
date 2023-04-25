@@ -2,9 +2,10 @@ import Car from "../models/Car.js";
 
 export const addCar = async (req, res, next) => {
   try {
-    console.log(1);
+    // console.log(1);
     const newCar = new Car({
       ...req.body,
+      statusAble:"false"
     });
     await newCar.save();
     res.status(200).send("Car has been added successfuly.");
@@ -16,7 +17,7 @@ export const addCar = async (req, res, next) => {
 
 export const getAllCar = async (req, res, next) => {
   try {
-    console.log(2);
+    // console.log(2);
     const allCar = await Car.find();
     res.status(200).json(allCar);
   } catch (err) {

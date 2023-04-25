@@ -46,6 +46,10 @@ const CarInfoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    statusAble: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
