@@ -8,7 +8,6 @@ const CarInfoSchema = new mongoose.Schema(
     model: {
       type: String,
       required: true,
-      unique: true,
     },
     brand: {
       type: String,
@@ -21,6 +20,7 @@ const CarInfoSchema = new mongoose.Schema(
     lplate: {
       type: String,
       required: true,
+      unique: true
     },
     seat: {
       type: String,

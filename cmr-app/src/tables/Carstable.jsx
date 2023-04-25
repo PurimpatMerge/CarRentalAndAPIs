@@ -1,211 +1,128 @@
-import React, { useMemo, useEffect, useState  } from 'react';
-import MaterialReactTable from 'material-react-table';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import car from '../img/Hondacity.png'
-import Switch from '@mui/material/Switch';
-import goodcat from '../img/oragoodcat.png'
-import nissanleaf from '../img/nissanleaft.jpg' 
-import hrvnobg from '../img/hrvnobg.png'
-import useFetch from "../hooks/useFetch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Switch,
+  Button,
+  IconButton,
+} from "@mui/material";
+import { Delete } from "@mui/icons-material";
 import axios from "axios";
-
-//nested data is ok, see accessorKeys in ColumnDef below
-const data2 = [
-    {
-        id: 1,
-        img: <img src={car} alt="car" className='object-cover w-28 md:w-full ' />,
-        brand: 'Honda',
-        model: 'City',
-        year: '2020',
-        plate: 'กน92',
-        type: 'Eco',
-        price: '1000',
-        status: <Switch  defaultChecked color="success" />,
-        button: <div>
-            <Link to="/Adminsystem1/Editcar"><Button variant="text">Edit</Button></Link>
-            <IconButton aria-label="delete" color='error'> <DeleteIcon/></IconButton>
-        </div>
-
-    },
-    {
-        id: 2,
-        img: <img src={goodcat} alt="goodcat" className='object-cover w-28 md:w-full ' />,
-        brand: 'GWM',
-        model: 'Ora Goodcat',
-        year: '2020',
-        plate: 'กน921',
-        type: 'EV',
-        price: '1300',
-        status: <Switch  defaultChecked color="success" />,
-        button: <div>
-            <Link to="/Adminsystem1/Editcar"><Button variant="text">Edit</Button></Link>
-            <IconButton aria-label="delete" color='error'> <DeleteIcon/></IconButton>
-        </div>
-
-    },
-    {
-        id: 3,
-        img: <img src={nissanleaf} alt="goodcat" className='object-cover w-28 md:w-full ' />,
-        brand: 'Nissan',
-        model: 'Leaf',
-        year: '2017',
-        plate: 'กน9212',
-        type: 'Eco',
-        price: '1000',
-        status: <Switch  defaultChecked color="success" />,
-        button: <div>
-            <Link to="/Adminsystem1/Editcar"><Button variant="text">Edit</Button></Link>
-            <IconButton aria-label="delete" color='error'> <DeleteIcon/></IconButton>
-        </div>
-
-    },
-    {
-        status: <Switch  defaultChecked color="success" />,
-        button: <div>
-            <Link to="/Adminsystem1/Editcar"><Button variant="text">Edit</Button></Link>
-            <IconButton aria-label="delete" color='error'> <DeleteIcon/></IconButton>
-        </div>
-
-    },
-
-];
+import useFetch from "../hooks/useFetch";
 
 const Carstable = () => {
-    const { data, loading, error } = useFetch("http://localhost:8800/api/car/allCar");
-    useEffect(() => {
-    }, [data]);
-  
-    //should be memoized or stable
-    const columns2 = useMemo(
-        () => [
-            {
-                accessorKey: 'id', //access nested data with dot notation
-                header: 'ID',
-                size:5
-            },
-            {
-                accessorKey: 'img', //access nested data with dot notation
-                header: 'IMG',
-                size:20
-            },
-            {
-                accessorKey: 'brand',
-                header: 'Brand',
-                size: 10,
-              },
-              {
-                accessorKey: 'model',
-                header: 'Model',
-                size: 10,
-              },
-              {
-                accessorKey: 'year',
-                header: 'Year',
-                size: 10,
-              },
-            {
-                accessorKey: 'plate', //normal accessorKey
-                header: 'License Plate',
-                size:10
-            },
-            {
-                accessorKey: 'type',
-                header: 'Type',
-                size:10
-            },
-            {
-                accessorKey: 'price',
-                header: 'Price',
-                size:10
-            },
-            {
-                accessorKey: 'status',
-                header: 'Status',
-                size:10
-            },
-            {
-                accessorKey: 'button',
-                header: 'Action',
-                size:5
-            }
+  const { data, loading, error } = useFetch(
+    "http://localhost:8800/api/car/allCar"
+  );
+  const [cars, setCars] = useState(data);
 
-        ],
-        [],
+  useEffect(() => {
+    setCars(data);
+  }, [data]);
+
+  const deleteThisCar = async (car) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
     );
-    //should be memoized or stable
-    const columns = useMemo(
-        () => [
-          {
-            accessorKey: "_id",
-            header: "ID",
-            size: 5,
-          },
-          {
-            accessorKey: "photos",
-            header: "IMG",
-            size: 20,
-          },
-          {
-            accessorKey: "brand",
-            header: "Brand",
-            size: 10,
-          },
-          {
-            accessorKey: "model",
-            header: "Model",
-            size: 10,
-          },
-          {
-            accessorKey: "year",
-            header: "Year",
-            size: 10,
-          },
-          {
-            accessorKey: "lplate",
-            header: "License Plate",
-            size: 10,
-          },
-          {
-            accessorKey: "type",
-            header: "Type",
-            size: 10,
-          },
-          {
-            accessorKey: "price",
-            header: "Price",
-            size: 10,
-          },
-          {
-            accessorKey: "status",
-            header: "Status",
-            size: 10,
-            Cell: ({ row }) => (
-              <Switch defaultChecked color="success" />
-            ),
-          },
-          {
-            accessorKey: "button",
-            header: "Action",
-            size: 5,
-            Cell: ({ row }) => (
-              <div>
-                <Link to={`/Adminsystem1/Editcar/${row._id}`}>
-                  <Button variant="text">Edit</Button>
-                </Link>
-                <IconButton aria-label="delete" color="error">
-                  <DeleteIcon />
-                </IconButton>
-              </div>
-            ),
-          },
-        ],
-        []
-      );
+    if (confirmDelete) {
+      try {
+        const idDelete = car._id;
+        console.log(idDelete);
+        const success = await axios.delete(
+          `http://localhost:8800/api/car/deleteThiscar/${idDelete}`
+        );
+        if (success) {
+          window.location.href =
+            "http://localhost:3000/Adminsystem1/Carmanagement";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+  const handleSwitchChange = async (event, car) => {
+    cars.map(async (c) => {
+      try {
+        if (c._id === car._id) {
+          const getStatusUpdata = {
+            id: c._id,
+            statusAble: event.target.checked ? "true" : "false",
+          };
+          await axios.put(
+            "http://localhost:8800/api/car/updateStatusCar",
+            getStatusUpdata
+          );
 
-    return <div><MaterialReactTable  columns={columns2} data={data2} /> <MaterialReactTable  columns={columns} data={data} /></div>;
+          window.location.href =
+            "http://localhost:3000/Adminsystem1/Carmanagement";
+        } else {
+          window.location.href =
+            "http://localhost:3000/Adminsystem1/Carmanagement";
+          return c;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  };
+
+  return (
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Model</TableCell>
+            <TableCell>Brand</TableCell>
+            <TableCell>Year</TableCell>
+            <TableCell>Licence Plate</TableCell>
+            <TableCell>Seat</TableCell>
+            <TableCell>Door</TableCell>
+            <TableCell>Engine</TableCell>
+            <TableCell>Gear</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {cars.map((car, index) => (
+            <TableRow key={car._id}>
+              <TableCell>{car.model}</TableCell>
+              <TableCell>{car.brand}</TableCell>
+              <TableCell>{car.year}</TableCell>
+              <TableCell>{car.lplate}</TableCell>
+              <TableCell>{car.seat}</TableCell>
+              <TableCell>{car.door}</TableCell>
+              <TableCell>{car.engine}</TableCell>
+              <TableCell>{car.gear}</TableCell>
+              <TableCell>{car.type}</TableCell>
+              <TableCell>{car.price}</TableCell>
+              <TableCell>
+                <Switch
+                  checked={car.statusAble === "true" ? true : false}
+                  onChange={(event) => handleSwitchChange(event, car)}
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => deleteThisCar(car)}
+                >
+                  <Delete />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 export default Carstable;

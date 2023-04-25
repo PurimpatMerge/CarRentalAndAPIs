@@ -24,3 +24,34 @@ export const getAllCar = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+
+export const updateStatusCar = async (req, res, next) => {
+  try {
+    const { id, statusAble } = req.body;
+
+    const updatedCar = await Car.findByIdAndUpdate(id, { statusAble }, { new: true });
+    if (!updatedCar) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+
+    return res.status(200).json(updatedCar);
+  } catch (err) {
+    next("err");
+  }
+};
+export const deleteThiscar = async (req, res, next) => {
+  try {
+    const deleteCar = await Car.findByIdAndDelete(req.params.id);
+    if (!deleteCar) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+
+    return res.status(200).json(deleteCar);
+  } catch (err) {
+    next(err);
+  }
+};
+
