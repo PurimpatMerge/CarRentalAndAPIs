@@ -26,8 +26,6 @@ export const getAllCar = async (req, res, next) => {
 };
 
 
-
-
 export const updateStatusCar = async (req, res, next) => {
   try {
     const { id, statusAble } = req.body;
@@ -42,6 +40,8 @@ export const updateStatusCar = async (req, res, next) => {
     next("err");
   }
 };
+
+
 export const deleteThiscar = async (req, res, next) => {
   try {
     const deleteCar = await Car.findByIdAndDelete(req.params.id);
