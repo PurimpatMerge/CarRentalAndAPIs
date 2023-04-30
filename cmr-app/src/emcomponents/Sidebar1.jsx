@@ -42,7 +42,7 @@ const Sidebar = () => {
   return (
     <div data-aos="fade-right">
       <div
-        className={`hidden lg:block bg-white bg-opacity-60 min-h-screen p-5 pt-8 ${open ? "w-72" : "w-20"
+        className={`hidden lg:block bg-white bg-opacity-60 min-h-screen h-full p-5 pt-8 ${open ? "w-72" : "w-20"
           } duration-300 relative`}
       >
         <ArrowBackIcon fontSize="large"

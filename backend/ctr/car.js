@@ -25,6 +25,16 @@ export const getAllCar = async (req, res, next) => {
   }
 };
 
+export const getCarById = async (req, res, next) => {
+  try {
+    const allCarbyid = await Car.findById(req.params.id);
+     res.status(200).json(allCarbyid);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 
 export const updateStatusCar = async (req, res, next) => {
   try {
@@ -41,6 +51,22 @@ export const updateStatusCar = async (req, res, next) => {
   }
 };
 
+export const editCarById = async (req, res, next) => {
+  try {
+    const newData = new Car({  
+      ...req.body,
+    });
+    const updatedata = await Car.findByIdAndUpdate(req.body._id, { $set: newData }, { new: true });
+    if (!updatedata) {
+      
+      return res.status(404).json({ error: 'Car not found' });
+    }
+    return res.status(200).json(updatedata);
+  } catch (err) {
+    next("err");
+  }
+};
+
 
 export const deleteThiscar = async (req, res, next) => {
   try {
@@ -50,6 +76,19 @@ export const deleteThiscar = async (req, res, next) => {
     }
 
     return res.status(200).json(deleteCar);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteThiscarPhotos = async (req, res, next) => {
+  try {
+    
+    const deletePhotos = await Car.findByIdAndUpdate(req.params.id, { $set: {photos: []} });
+    if (!deletePhotos) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+    return res.status(200).json(deletePhotos);
   } catch (err) {
     next(err);
   }

@@ -5,13 +5,13 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 // import Autocomplete from '@mui/material/Autocomplete';
-import { Image } from 'antd';
+import { Image, Upload } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import Select from "@mui/material/Select";
 import axios from "axios";
 
 const Addcar = () => {
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState("");
     const [imageURLs, setImageURLs] = useState([]);
     const [info, setInfo] = useState({});
 
@@ -65,14 +65,36 @@ const Addcar = () => {
     };
 
     const handleClick = async (e) => {
+        // const listPhoto = [];
+        
         try {
-            const res = await axios.post("http://localhost:8800/api/car/addcar", info);
+            
+            const list = await Promise.all(
+                Object.values(images).map(async (file) => {
+                  const data = new FormData();
+                  data.append("file", file);
+                  data.append("upload_preset", "cz1o5kxe");
+                  
+                  const uploadRes = await axios.post("https://api.cloudinary.com/v1_1/dmtdxulw2/image/upload",data);
+                  const { url } = uploadRes.data;
+                    return url;
+                //   listPhoto.push(uploadRes.data.url)
+                })
+              );
+              
+            const addcar = {
+                ...info,
+                photos: list
+            }
+            console.log(addcar);
+            const res = await axios.post("http://localhost:8800/api/car/addcar", addcar);
             if(res){
                 // ให้ทำการ alert message
             }
         } catch (err) {
             console.log(err);
         }
+        
     };
 
     return (
@@ -86,7 +108,7 @@ const Addcar = () => {
                                 <td className="sm:py-4"> Car Image: </td>
                                 <td>
                                     <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <input hidden accept="image/*" type="file" onChange={onImageChange} />
+                                        <input hidden accept="image/*"  type="file" multiple onChange={onImageChange} />
                                         <PhotoCamera />
                                     </IconButton>
                                     <label className="font-bold text-blue-600">Upload Car Image</label>

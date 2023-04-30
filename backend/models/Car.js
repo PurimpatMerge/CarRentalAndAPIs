@@ -3,7 +3,6 @@ const CarInfoSchema = new mongoose.Schema(
   {
     photos: {
         type: [String],
-        required: false,
       },
     model: {
       type: String,

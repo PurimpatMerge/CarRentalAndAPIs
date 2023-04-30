@@ -1,10 +1,9 @@
 import React from "react";
 import Carstable from "../tables/Carstable";
 import { motion } from "framer-motion";
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
-import IconButton from '@mui/material/IconButton';
-import { Link } from "react-router-dom";
+
+
 const Payment = () => {
   return (
     <motion.div
@@ -23,12 +22,7 @@ const Payment = () => {
         </div>
         <div className="relative">
           <div className="z-40 absolute left-2 top-2">
-            <Link to="/Adminsystem1/Addcar"
-            ><IconButton color="success" aria-label="addperson">
-                <AddBoxOutlinedIcon />
-                <p className="text-base">Add</p>
-              </IconButton>
-            </Link>
+            
           </div>
           <Carstable />
         </div>
