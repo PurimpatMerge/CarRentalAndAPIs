@@ -11,7 +11,7 @@ import Select from "@mui/material/Select";
 import axios from "axios";
 
 const Addcar = () => {
-    const [images, setImages] = useState("");
+    
     const [imageURLs, setImageURLs] = useState([]);
     const [info, setInfo] = useState({});
 
@@ -22,6 +22,8 @@ const Addcar = () => {
         setImageURLs(newImageUrls);
     }, [images]);
 
+    //img
+    const [images, setImages] = useState("");
     const onImageChange = (e) => {
         setImages([...e.target.files]);
     };

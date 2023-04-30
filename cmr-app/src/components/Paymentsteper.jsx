@@ -13,7 +13,7 @@ import Fourthstep from './Fourthstep';
 const steps = ['Personal information', 'Rent confirmation', 'Payment'];
 
 const Paymentsteper = () => {
-    
+
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
 
@@ -30,7 +30,7 @@ const Paymentsteper = () => {
     };
 
     const allStepsCompleted = () => {
-        return completedSteps() === totalSteps() ;
+        return completedSteps() === totalSteps();
     };
 
     const handleNext = () => {
@@ -58,10 +58,10 @@ const Paymentsteper = () => {
         handleNext();
     };
 
-    
+
 
     return (
-        
+
         <div className='container mx-auto mt-10'>
             <Stepper nonLinear activeStep={activeStep}>
                 {steps.map((label, index) => (
@@ -76,14 +76,14 @@ const Paymentsteper = () => {
                 {allStepsCompleted() ? (
                     <React.Fragment>
                         <Typography sx={{ mt: 2, mb: 1 }}>
-                            <Fourthstep/>
+                            <Fourthstep />
                         </Typography>
-                       
+
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
                         <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                            
+
                             {
                                 activeStep === 0 ? <Firststep /> :
                                     activeStep === 1 ? <Secondstep /> :
@@ -106,13 +106,11 @@ const Paymentsteper = () => {
                                 Next
                             </Button>
                             */}
-                            
-                                    <Button onClick={handleComplete}>
-                                        {completedSteps() === totalSteps() - 1
-                                            ? 'Finish'
-                                            : 'Next'}
-                                    </Button>
-                                
+                            {completedSteps() !== totalSteps() - 1 && (
+                                <Button onClick={handleComplete}>
+                                    {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Next'}
+                                </Button>
+                            )}
                         </Box>
                     </React.Fragment>
                 )}

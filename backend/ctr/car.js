@@ -36,7 +36,9 @@ export const getCarById = async (req, res, next) => {
 
 export const getCarBySearch = async (req, res, next) => {
   try {
-    console.log('getCarbySearch API Test');
+    // console.log(2);
+    const allCar = await Car.find();
+    res.status(200).json(allCar);
   } catch (err) {
     next(err);
   }

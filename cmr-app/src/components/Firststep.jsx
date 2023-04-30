@@ -6,10 +6,38 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import lineicon from '../img/line.png'
-
+import { useLocation,useParams } from 'react-router-dom';
+import useFetch from "../hooks/useFetch";
 import { useTranslation } from 'react-i18next';
+import { useState} from "react";
 const Firststep = () => {
+
+    const { id } = useParams();
+    const { data, loading, error } = useFetch(
+        `http://localhost:8800/api/car/getCarById/${id}`
+    );
+    console.log(data);
+    const location = useLocation();
+    const { dataSearch } = location.state;
+    console.log('datasearch=',dataSearch);
     const { t } = useTranslation();
+
+    //getdatapersonal
+    const [info, setInfo] = useState({});
+    const handleChange = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
+    // const personalInfo = info.push(...dataSearch)
+    const personalInfo = {
+        ...info,
+        ...dataSearch,
+        carid: data._id
+    }
+
+    //storage cookie
+    localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+
     return (
         <div className="container mx-auto">
             <div className="justify-between sm:flex">
@@ -18,18 +46,18 @@ const Firststep = () => {
                     <table className='my-5 mx-5'>
                         <tr >
                             <td className='py-5 pr-5 '>
-                                <TextField id="standard-basic" label="Firstname" variant="standard" />
+                                <TextField onChange={handleChange} id="cfname" label="Firstname" variant="standard" />
                             </td>
                             <td>
-                                <TextField id="standard-basic" label="Lastname" variant="standard" />
+                                <TextField onChange={handleChange} id="clname" label="Lastname" variant="standard" />
                             </td>
                         </tr>
                         <tr>
                             <td className='py-5 pr-5'>
-                                <TextField id="standard-basic" label="Email" variant="standard" />
+                                <TextField onChange={handleChange} id="cemail" label="Email" variant="standard" />
                             </td>
                             <td>
-                                <TextField id="standard-basic" label="Phone Number" variant="standard" />
+                                <TextField onChange={handleChange} id="cphone" label="Phone Number" variant="standard" />
                             </td>
                         </tr>
                     </table>
@@ -41,19 +69,19 @@ const Firststep = () => {
                         <div className='mt-5'>
                             <div className='mb-2'>
                                 <DirectionsCarIcon className='mb-1 text-blue-600' />
-                                <label >Honda City 2023</label>
+                                <label >{data.model} {data.brand} {data.year}</label>
                             </div>
                             <div className='mb-2'>
                                 <LocationOnIcon className='mb-1 text-yellow-500' />
                                 <label >{t('pickuplocation')}</label>
-                                <p className='ml-6'>ChiangMai, Airport</p>
-                                <p className='ml-6'>10/09/2023, 9:00 AM.</p>
+                                <p className='ml-6'>{dataSearch.getCar}</p>
+                                <p className='ml-6'>{dataSearch.getCarTime}</p>
                             </div>
                             <div className='mb-2'>
                                 <LocationOnIcon className='mb-1 text-red-500' />
                                 <label >{t('returnlocation')}</label>
-                                <p className='ml-6'>ChiangMai, Airport</p>
-                                <p className='ml-6'>13/09/2023, 9:00 AM.</p>
+                                <p className='ml-6'>{dataSearch.backCar}</p>
+                                <p className='ml-6'>{dataSearch.backCarTime}</p>
                             </div>
                         </div>
                     </div>
@@ -81,9 +109,9 @@ const Firststep = () => {
                 <div className='bg-white bg-opacity-60 rounded-lg border shadow-lg sm:w-2/6'>
                     <div className='mx-5 my-5'>
                         <h1 className='font-bold text-xl tracking-wide mb-5'>{t('pricedetail')}</h1>
-                        <p>{t('rentperiod')} 3 {t('day')}</p>
+                        <p>{t('rentperiod')} ต้องคำนวนวัน 3 {t('day')}</p>
                         <Divider />
-                       <p className='mt-1'>{t('totalprice')} 3000 {t('thb')}</p>
+                       <p className='mt-1'>{t('totalprice')} ต้องคำนวนเวลา  {t('thb')}</p>
                     </div>
                 </div>
             </div>

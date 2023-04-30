@@ -42,8 +42,7 @@ const Carstable = () => {
           `http://localhost:8800/api/car/deleteThiscar/${idDelete}`
         );
         if (success) {
-          window.location.href =
-            "http://localhost:3000/Adminsystem1/Carmanagement";
+          window.location.reload(false);
         }
       } catch (err) {
         console.log(err);

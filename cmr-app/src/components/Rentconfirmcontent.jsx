@@ -13,48 +13,59 @@ import gear from '../img/gear.png'
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
-
-
-
+import { useLocation,useParams } from 'react-router-dom';
+import useFetch from "../hooks/useFetch";
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 const Rentconfirmcontent = () => {
+
+    const navigate = useNavigate();
+
+    const { id } = useParams();
+    const { data, loading, error } = useFetch(
+        `http://localhost:8800/api/car/getCarById/${id}`
+    );
+    console.log(data);
+  useEffect(() => {
+    
+  }, [data]);
+
     const location = useLocation();
+    const { dataSearch } = location.state;
     const lang = location.pathname.split("/")[2];
     const { t} = useTranslation();
   console.log(lang);
 
-    const car = [
-        { title: "Honda City", img: hondacity, year: "2023", seat: "4", door: "4", engine: "988", gear: "auto", price: "1000" },
-    ]
+    
 
     return (
         <div className="container mx-auto">
-            {car.map((car, index) => (
+          
                 <div className="border rounded-lg  mx-4 bg-white bg-opacity-60 shadow-lg">
                     <div className="lg:flex  ">
                         <div className="w-2/4 mx-4 my-4">
-                            <img src={car.img} alt="hondacity" className="" />
+                            <img src={data.photos} alt="hondacity" className="" />
                         </div>
                         <div className="flex-col mx-4 my-4">
                             <div className="my-1">
-                                <p className="sm:text-2xl">{car.title} {car.year}</p>
+                                <p className="sm:text-2xl">{data.model} {data.brand} {data.year}</p>
                             </div>
                             <div className="flex my-4">
                                 <div className="flex">
                                     <AirlineSeatReclineNormalIcon />
-                                    <p>{car.seat}</p>
+                                    <p>{data.seat}</p>
                                 </div>
                                 <div className="flex ml-1">
                                     <img src={cardoor} alt="cardoor" className='w-6 h-6' />
-                                    <p className="ml-1">{car.door}</p>
+                                    <p className="ml-1">{data.door}</p>
                                 </div>
                                 <div className="flex ml-1">
                                     <img src={engine} alt="engine" className=' w-6 h-6' />
-                                    <p className="ml-1 text-xs mt-1 lg:mt-0 lg:text-base">{car.engine} cc.</p>
+                                    <p className="ml-1 text-xs mt-1 lg:mt-0 lg:text-base">{data.engine} cc.</p>
                                 </div>
                                 <div className="flex ml-1">
                                     <img src={gear} alt="gear" className='h-5 w-5 mb-1' />
-                                    <p className="ml-1 text-xs mt-1 lg:mt-0 sm:text-base">{car.gear}</p>
+                                    <p className="ml-1 text-xs mt-1 lg:mt-0 sm:text-base">{data.gear}</p>
                                 </div>
                             </div>
 
@@ -100,13 +111,13 @@ const Rentconfirmcontent = () => {
                         </div>
                         <div className="flex-col mx-4 my-4 w-full text-end">
                             <p>{t('priceperday')}</p>
-                            <p>{car.price} THB</p>
+                            <p>{data.price} THB</p>
                             
-                            <Link to={`/Paymentconfirm/${lang}`}><Button className=" duration-300" variant="contained">{t('rent')}</Button></Link>
+                            <Button onClick={() => navigate(`/Paymentconfirm/${lang}/${data._id}`, { state: { dataSearch  }  })} className=" duration-300" variant="contained">{t('rent')}</Button>
                         </div>
                     </div>
                 </div>
-            ))}
+            
         </div>
     )
 }

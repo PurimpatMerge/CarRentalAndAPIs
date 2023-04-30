@@ -5,7 +5,21 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import useFetch from "../hooks/useFetch";
+import { useParams } from 'react-router-dom';
 const Secondstep = () => {
+    //cookie
+    const savedDataSearch = localStorage.getItem('personalInfo');
+    const dataSearch = savedDataSearch ? JSON.parse(savedDataSearch) : null;
+    console.log(dataSearch);
+
+    //getcatbyid
+    const { id } = useParams();
+    const { data, loading, error } = useFetch(
+        `http://localhost:8800/api/car/getCarById/${id}`
+    );
+    console.log(data);
+
     const { t } = useTranslation();
     return (
         <div className="container mx-auto">
@@ -15,18 +29,18 @@ const Secondstep = () => {
                     <table className='my-5 mx-5'>
                         <tr >
                             <td className='py-5 pr-5 '>
-                                <TextField id="standard-basic-read-only-input" value={"Phuwadech"} label="Firstname" variant="standard" />
+                                <TextField id="standard-basic-read-only-input" InputProps={{readOnly: true,}} value={dataSearch.cfname} label="Firstname" variant="standard" />
                             </td>
                             <td>
-                                <TextField id="standard-basic-read-only-input" value={"Jantarapipat "} label="Lastname" variant="standard" />
+                                <TextField id="standard-basic-read-only-input" InputProps={{readOnly: true,}} value={dataSearch.clname} label="Lastname" variant="standard" />
                             </td>
                         </tr>
                         <tr>
                             <td className='py-5 pr-5'>
-                                <TextField id="standard-basic-read-only-input" value={"Phuwa@gmail.com"} label="Email" variant="standard" />
+                                <TextField id="standard-basic-read-only-input" InputProps={{readOnly: true,}} value={dataSearch.cemail} label="Email" variant="standard" />
                             </td>
                             <td>
-                                <TextField id="standard-basic-read-only-input" value={"0811111111"} label="Phone Number" variant="standard" />
+                                <TextField id="standard-basic-read-only-input" InputProps={{readOnly: true,}} value={dataSearch.cphone} label="Phone Number" variant="standard" />
                             </td>
                         </tr>
                     </table>
@@ -38,19 +52,19 @@ const Secondstep = () => {
                         <div className='mt-5'>
                             <div className='mb-2'>
                                 <DirectionsCarIcon className='mb-1 text-blue-600' />
-                                <label >Honda City 2023</label>
+                                <label >{data.model}{data.brand}{data.year}</label>
                             </div>
                             <div className='mb-2'>
                                 <LocationOnIcon className='mb-1 text-yellow-500' />
                                 <label >{t('pickuplocation')}</label>
-                                <p className='ml-6'>ChiangMai, Airport</p>
-                                <p className='ml-6'>13/09/2023, 9:00 AM.</p>
+                                <p className='ml-6'>{dataSearch.getCar}</p>
+                                <p className='ml-6'>{dataSearch.getCarTime}</p>
                             </div>
                             <div className='mb-2'>
                                 <LocationOnIcon className='mb-1 text-red-500' />
                                 <label >{t('returnlocation')}</label>
-                                <p className='ml-6'>ChiangMai, Airport</p>
-                                <p className='ml-6'>13/09/2023, 9:00 AM.</p>
+                                <p className='ml-6'>{dataSearch.backCar}</p>
+                                <p className='ml-6'>{dataSearch.backCarTime}</p>
                             </div>
                         </div>
                     </div>
@@ -68,15 +82,15 @@ const Secondstep = () => {
                             value={`${t('termsandconditionscontent')}`}
                             variant="filled"
                         />
-<Checkbox /> <label>{t('accept')}</label>
+                        <Checkbox /> <label>{t('accept')}</label>
                     </div>
                 </div>
                 <div className='bg-white bg-opacity-60 rounded-lg border shadow-lg  h-36 sm:w-2/6'>
                     <div className='mx-5 my-5'>
                         <h1 className='font-bold text-xl tracking-wide mb-5'>{t('pricedetail')}</h1>
-                        <p>{t('rentperiod')} 3 {t('day')}</p>
+                        <p>{t('rentperiod')} คำนวนวัน {t('day')}</p>
                         <Divider />
-                        <p className='mt-1'>{t('totalprice')} 3000 {t('thb')}</p>
+                        <p className='mt-1'>{t('totalprice')} คำนวนราคา {t('thb')}</p>
                     </div>
                 </div>
             </div>

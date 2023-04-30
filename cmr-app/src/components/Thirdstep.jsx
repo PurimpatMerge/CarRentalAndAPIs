@@ -6,10 +6,34 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import qrcode from '../img/qrcode.jpg'
 import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import useFetch from "../hooks/useFetch";
+import { useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import axios from "axios";
+import { Image } from 'antd';
 const Thirdstep = () => {
+    //cookie
+    const savedDataSearch = localStorage.getItem('personalInfo');
+    const dataSearch = savedDataSearch ? JSON.parse(savedDataSearch) : null;
+    console.log(dataSearch);
+
+    //getcatbyid
+    const { id } = useParams();
+    const { data, loading, error } = useFetch(
+        `http://localhost:8800/api/car/getCarById/${id}`
+    );
+    console.log(data);
+
     const { t } = useTranslation();
-    const [images, setImages] = useState([]);
+
     const [imageURLs, setImageURLs] = useState([]);
+
+    //img
+    const [images, setImages] = useState("");
+    const onImageChange = (e) => {
+        setImages([...e.target.files]);
+    };
+
 
     useEffect(() => {
         if (images.length < 1) return;
@@ -18,10 +42,39 @@ const Thirdstep = () => {
         setImageURLs(newImageUrls);
     }, [images]);
 
-    const onImageChange = (e) => {
-        setImages([...e.target.files]);
-    };
+    const sendRentCar = async (e) => {
 
+        const list = await Promise.all(
+            Object.values(images).map(async (file) => {
+                const data = new FormData();
+                data.append("file", file);
+                data.append("upload_preset", "cz1o5kxe");
+
+                const uploadRes = await axios.post("https://api.cloudinary.com/v1_1/dmtdxulw2/image/upload", data);
+                const { url } = uploadRes.data;
+                return url;
+                //   listPhoto.push(uploadRes.data.url)
+            })
+        );
+
+        const infoRentDetail = {
+            cusfname: dataSearch.cfname,
+            cuslname: dataSearch.clname,
+            cusemail: dataSearch.cemail,
+            cusphone: dataSearch.cphone,
+            getcar: dataSearch.getCar,
+            getcartime: dataSearch.getCarTime,
+            returncar: dataSearch.backCar,
+            returncartime: dataSearch.backCarTime,
+            carid: data._id,
+            photos: list
+        }
+        const res = await axios.post("http://localhost:8800/api/rent/addrent", infoRentDetail);
+        if(res){
+            console.log(res.data);
+        }
+         
+    };
 
     return (
         <div className="container mx-auto">
@@ -32,18 +85,18 @@ const Thirdstep = () => {
                         <table className='my-5 mx-5'>
                             <tr >
                                 <td className='py-5 pr-5 '>
-                                    <TextField id="standard-basic-read-only-input" value={"Phuwadech"} label="Firstname" variant="standard" />
+                                    <TextField InputProps={{ readOnly: true, }} value={dataSearch.cfname} label="Firstname" variant="standard" />
                                 </td>
                                 <td>
-                                    <TextField id="standard-basic-read-only-input" value={"Jantarapipat"} label="Lastname" variant="standard" />
+                                    <TextField InputProps={{ readOnly: true, }} value={dataSearch.clname} label="Lastname" variant="standard" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className='py-5 pr-5'>
-                                    <TextField id="standard-basic-read-only-input" value={"Phuwa@gmail.com"} label="Email" variant="standard" />
+                                    <TextField InputProps={{ readOnly: true, }} value={dataSearch.cemail} label="Email" variant="standard" />
                                 </td>
                                 <td>
-                                    <TextField id="standard-basic-read-only-input" value={"0811111111"} label="Phone Number" variant="standard" />
+                                    <TextField InputProps={{ readOnly: true, }} value={dataSearch.cphone} label="Phone Number" variant="standard" />
                                 </td>
                             </tr>
                         </table>
@@ -56,17 +109,17 @@ const Thirdstep = () => {
                                 <div className='mt-5'>
                                     <div className='mb-2'>
                                         <DirectionsCarIcon className='mb-1 text-blue-600' />
-                                        <label >Honda City 2023</label>
+                                        <label >{data.model}{data.brand}{data.year}</label>
                                     </div>
                                     <div className='mb-2'>
                                         <LocationOnIcon className='mb-1 text-yellow-500' />
                                         <label >{t('pickuplocation')}</label>
-                                        <p className='ml-6'>ChiangMai, Airport, 10/09/2023, 9:00 AM.</p>
+                                        <p className='ml-6'>{dataSearch.getCar}, {dataSearch.getCarTime}</p>
                                     </div>
                                     <div className='mb-2'>
                                         <LocationOnIcon className='mb-1 text-red-500' />
                                         <label >{t('returnlocation')}</label>
-                                        <p className='ml-6'>ChiangMai, Airport , 13/09/2023, 16:00 AM.</p>
+                                        <p className='ml-6'>{dataSearch.backCar} , {dataSearch.backCarTime}</p>
                                     </div>
                                 </div>
                             </div>
@@ -75,8 +128,8 @@ const Thirdstep = () => {
                             <div className='mx-5 my-5'>
                                 <h1 className='font-bold text-xl tracking-wide '>{t('pricedetail')}</h1>
                                 <Divider />
-                                <p className='mt-5'>{t('rentperiod')} 3 {t('day')}</p>
-                                <p className='mt-1'>{t('totalprice')} 3000 {t('thb')}</p>
+                                <p className='mt-5'>{t('rentperiod')} คำนวนวัน  {t('day')}</p>
+                                <p className='mt-1'>{t('totalprice')} คำนวนราคา {t('thb')}</p>
                             </div>
                         </div>
 
@@ -104,18 +157,18 @@ const Thirdstep = () => {
                         <form>
                             <label class="block">
                                 <span class="sr-only">Choose File</span>
-                                <input type="file" id="file" accept="image/*" onChange={onImageChange} class="text-sm text-gray-500 file:duration-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-opacity-60 file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:scale-105" />
+                                <input type="file" accept="image/*" onChange={onImageChange} class="text-sm text-gray-500 file:duration-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-opacity-60 file:bg-blue-50 file:text-blue-700 hover:file:cursor-pointer hover:file:scale-105" />
                                 <p className='text-red-600'>{t('slip')}</p>
                             </label>
                         </form>
                         {imageURLs.map((imageSrc) => (
-                            <img className="sm:w-48 w-20 h-20 sm:h-48 rounded-lg" src={imageSrc} alt="profileimg" />
+                            <Image width={150} src={imageSrc} alt="profileimg" />
                         ))}
                     </div>
 
                 </div>
 
-
+                <Button onClick={() => { sendRentCar() }}>Finish</Button>
 
 
 
