@@ -16,8 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 const Carlist = () => {
-
     const location = useLocation();
+    const { dataSearch } = location.state;
     const lang = location.pathname.split("/")[2];
     const { t } = useTranslation();
     const car = [
@@ -28,7 +28,7 @@ const Carlist = () => {
         
     ]
 
-
+console.log("this data geter",dataSearch);
     
 
     return (

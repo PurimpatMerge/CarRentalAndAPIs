@@ -13,16 +13,8 @@ import Searchbar from './Searchbar';
 
 const Hero = () => {
     
-
-    
-
     const { t } = useTranslation();
    
-  
-
-
- 
-
     return (
         <div>
             <div className="bg-[url('./img/bg1.jpg')] bg-cover  bg-fixed bg-white h-[520px] text-center  relative">
