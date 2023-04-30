@@ -34,6 +34,13 @@ export const getCarById = async (req, res, next) => {
   }
 };
 
+export const getCarBySearch = async (req, res, next) => {
+  try {
+    console.log('getCarbySearch API Test');
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 export const updateStatusCar = async (req, res, next) => {
