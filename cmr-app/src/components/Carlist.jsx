@@ -1,7 +1,6 @@
 import React from "react";
 import Divider from '@mui/material/Divider';
 import { Button } from '@mui/material';
-import hondacity from '../img/Hondacity.png'
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import Document1 from "./Document1";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -9,7 +8,6 @@ import cardoor from '../img/cardoor.png'
 import engine from '../img/engine.png'
 import gear from '../img/gear.png'
 import { Pagination } from '@mui/material';
-import { Link } from "react-router-dom";
 import Document from "./Document";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useTranslation } from 'react-i18next';
@@ -25,18 +23,20 @@ const Carlist = () => {
     const { data, loading, error } = useFetch(
         "http://localhost:8800/api/car/getCarBySearch"
     );
-    console.log(data);
-  useEffect(() => {
-    
-  }, [data]);
+    // console.log(data);
+    useEffect(() => {
+
+    }, [data]);
     const location = useLocation();
     const { dataSearch } = location.state;
     const lang = location.pathname.split("/")[2];
     const { t } = useTranslation();
-   
 
-console.log("this data geter",dataSearch);
-    
+
+
+
+    // console.log("this data geter",dataSearch);
+
 
 
 
@@ -100,9 +100,9 @@ console.log("this data geter",dataSearch);
                             <div className="flex-col w-full mx-4 my-4 text-end ">
                                 <p>{t('priceperday')}</p>
                                 <p>{cars.price} THB</p>
-                                
-                                
-                               <Button onClick={() => navigate(`/Rentconfirm/${lang}/${cars._id}`, { state: { dataSearch  }  })} className=" duration-300" variant="contained">{t('reservebtn')}</Button>
+
+
+                                <Button onClick={() => navigate(`/Rentconfirm/${lang}/${cars._id}`, { state: { dataSearch } })} className=" duration-300" variant="contained">{t('reservebtn')}</Button>
                             </div>
                         </div>
                     </div>

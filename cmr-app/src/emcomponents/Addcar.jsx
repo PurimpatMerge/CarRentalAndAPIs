@@ -14,16 +14,17 @@ const Addcar = () => {
     
     const [imageURLs, setImageURLs] = useState([]);
     const [info, setInfo] = useState({});
-
+    const [images, setImages] = useState("");
+    
     useEffect(() => {
-        if (images.length < 1) return;
+        if (images?.length < 1) return;
         const newImageUrls = [];
-        images.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
+        images?.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
         setImageURLs(newImageUrls);
     }, [images]);
 
     //img
-    const [images, setImages] = useState("");
+    
     const onImageChange = (e) => {
         setImages([...e.target.files]);
     };
@@ -119,8 +120,8 @@ const Addcar = () => {
                             <tr >
                                 <td></td>
                                 <td>
-                                    {imageURLs.map((imageSrc) => (
-                                        <Image width={150} src={imageSrc} alt="profileimg" />
+                                    {imageURLs?.map((imageSrc) => (
+                                        <Image width={150} src={imageSrc? imageSrc: ''} alt="profileimg" />
                                     ))}
                                 </td>
                             </tr>

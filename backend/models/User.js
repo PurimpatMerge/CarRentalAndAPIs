@@ -30,13 +30,17 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    Position: {
-      type: Boolean,
+    position: {
+      type: String,
       default: false,
+    },
+    status: {
+      type: String,
+      required: false,
     },
     isAdmin: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true }

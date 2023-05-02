@@ -25,13 +25,6 @@ const Employees = () => {
           <label className="text-4xl my-5 text-orange-400 font-extrabold ">Team</label>
         </div>
         <div className="relative">
-          <div className="z-40 absolute left-2 top-2">
-            <Link to="/Adminsystem/Addprofile"
-            ><IconButton color="success" aria-label="addperson">
-                <PersonAddOutlinedIcon />
-              </IconButton>
-            </Link>
-          </div>
           <Employeestable />
         </div>
       </div>

@@ -107,7 +107,7 @@ const Carstable = () => {
         <TableBody>
           {cars.slice(currentPage * 4, (currentPage + 1) * 4).map((car, index) => (
             <TableRow key={car._id} className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-              <TableCell ><img className="object-contain w-60 h-40" src={car?.photos[0]} alt="car" /></TableCell>
+              <TableCell ><img className="object-contain w-60 h-32" src={car?.photos[0]} alt="car" /></TableCell>
               <TableCell >{car.model}</TableCell>
               <TableCell >{car.brand}</TableCell>
               <TableCell >{car.year}</TableCell>

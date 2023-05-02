@@ -4,7 +4,6 @@ import mongoose from "mongoose"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import authRoute from "./routes/auth.js";
-import usersRoute from "./routes/usersmanage.js";
 import carsRoute from "./routes/car.js";
 import rentsRoute from "./routes/rent.js";
 
@@ -39,7 +38,6 @@ app.use(express.json());
 
 //routes
 app.use("/api/auth", authRoute); //FE-1
-app.use("/api/usersmanage", usersRoute); //FE-2 test
 app.use("/api/car", carsRoute); //FE- unknow for car
 app.use("/api/rent", rentsRoute); //FE- for Rent
 

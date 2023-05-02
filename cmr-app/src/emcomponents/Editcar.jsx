@@ -110,7 +110,7 @@ const Editcar = () => {
     };
 
     //delete photo
-    const deleteThisCar = async (a) => {
+    const deleteThiscarPhotos = async (a) => {
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this item?"
         );
@@ -122,8 +122,7 @@ const Editcar = () => {
                     `http://localhost:8800/api/car/deleteThiscarPhotos/${idDelete}`
                 );
                 if (success) {
-                    window.location.href =
-                        `http://localhost:3000/Adminsystem1/Editcar/${idDelete}`;
+                    window.location.reload(false);
                 }
             } catch (err) {
                 console.log(err);
@@ -149,7 +148,7 @@ const Editcar = () => {
                                     </IconButton>
                                     <label className="font-bold text-blue-600">Upload Car Image</label>
                                     <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <button onClick={() => deleteThisCar(data._id)} />
+                                        <button onClick={() => deleteThiscarPhotos(data._id)} />
                                         <Delete className="text-red-500" />
                                     </IconButton>
                                     <label className="font-bold text-red-600">Delete Photos</label>

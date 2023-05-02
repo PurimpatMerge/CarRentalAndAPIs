@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import PaymentIcon from '@mui/icons-material/Payment';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
@@ -19,12 +19,32 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 const Sidebar = () => {
   AOS.init();
+  const [user, setUser] = useState('null');
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    }, 500);
+
+    // Clean up the timer when the component is unmounted
+    return () => clearTimeout(timerId);
+
+  }, []);
+
+   //clear local storage
+   const handleLogout= () => {
+    localStorage.removeItem('user');
+  }
+
   const [open, setOpen] = useState(true);
   const Menus = [
     {
       title: "Profile",
       icon: <ManageAccountsIcon />,
-      page: "Profile",
+      page: `Profile/${user._id}`,
       event: 0,
       bordertb: true,
     },
@@ -59,7 +79,7 @@ const Sidebar = () => {
           className={`mx-auto text-center animate-fade-in-down duration-100 pt-5 animete-fade-in-up ${!open && "hidden "
             }  `}
         >
-          <p >กนกภัทร กลับเพชร</p>
+          <p >{user.fname} {user.lname}</p>
         </div>
 
 

@@ -58,9 +58,9 @@ const App = () => {
         <Route path="/Login" element={<Login />} />
         <Route path="/Adminsystem" element={<ProtectedRoute><Adminsystem /></ProtectedRoute>}>
           <Route path="" element={<Dashboard />} />
-          <Route path="Taskdetail" element={<Taskdetail />} />
-          <Route path="Historydetail" element={<Historydetail />} />
-          <Route path="Profile" element={<Profile />} />
+          <Route path="Taskdetail/:id" element={<Taskdetail />} />
+          <Route path="Historydetail/:id" element={<Historydetail />} />
+          <Route path="Profile/:id" element={<Profile />} />
           <Route path="Addprofile" element={<Addprofile />} />
           <Route path="Tasks" element={<Tasks />} />
           <Route path="History" element={<History />} />
@@ -79,10 +79,10 @@ const App = () => {
         <Route path="/Login1" element={<Login1 />} />
         <Route path="/Adminsystem1" element={<Adminsystem1 />}>
           <Route path="" element={<Payment />} />
-          <Route path="Profile" element={<Profile />} />
+          <Route path="Profile/:id" element={<Profile />} />
           <Route path="Tasksem" element={<Tasksem />} />
           <Route path="Carmanagement" element={<Carmanagement />} />
-          <Route path="Paymentdetail" element={<Paymentdetail />} />
+          <Route path="Paymentdetail/:id" element={<Paymentdetail />} />
           <Route path="Mytasksdetail" element={<Mytasksdetail />} />
           <Route path="Addcar" element={<Addcar />} />
           <Route path="Editcar/:id" element={<Editcar />} />

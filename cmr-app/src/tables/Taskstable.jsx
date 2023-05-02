@@ -1,12 +1,18 @@
-import React, { useMemo } from 'react';
-import MaterialReactTable from 'material-react-table';
-import { Button } from '@mui/material';
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import car from '../img/Hondacity.png'
-import car1 from '../img/hrvnobg.png'
-import car2 from '../img/nissanleaft.jpg'
-import car3 from '../img/gtrnbg.png'
-//nested data is ok, see accessorKeys in ColumnDef below
+import { useNavigate } from 'react-router-dom';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+} from "@mui/material";
+import Pagination from '@mui/material/Pagination';
+import useFetch from "../hooks/useFetch";
+
 
 
 const data = [
@@ -21,112 +27,99 @@ const data = [
     time: '21/01/2023-23/01/2023',
     responsiblename: 'กนกภัทร',
     responsiblelname: '	กลับเพชร',
-    button: <Link to="/Adminsystem/Taskdetail"><Button  variant="text">Detail</Button></Link>,
+    // button: <Link to="/Adminsystem/Taskdetail"><Button  variant="text">Detail</Button></Link>,
   },
-  {
-    id: 2,
-    img: <img src={car1} alt="car" className='object-cover w-28 md:w-full '/>,
-    brand: 'Honda',
-    model: 'HRV',
-    year: '2020',
-    plate: 'ก1254',
-    type: 'SUV',
-    time: '21/01/2023-23/01/2023',
-    responsiblename: 'ชนัย',
-    responsiblelname: 'วรภัทรศิริสกุล',
-    button: <Link to="/Adminsystem/Taskdetail"><Button  variant="text">Detail</Button></Link>,
-  },
-  {
-    id: 3,
-    img: <img src={car2} alt="car" className='object-cover w-28 md:w-full '/>,
-    brand: 'Nissan',
-    model: 'Leaf',
-    year: '2017',
-    plate: 'ก932',
-    type: 'Eco',
-    time: '21/01/2023-23/01/2023',
-    responsiblename: 'กรชวัล',
-    responsiblelname: 'หงษ์ทอง',
-    button: <Link to="/Adminsystem/Taskdetail"><Button  variant="text">Detail</Button></Link>,
-  },
-  {
-    id: 4,
-    img: <img src={car} alt="car" className='object-cover w-28 md:w-full '/>,
-    brand: 'Honda',
-    model: 'City',
-    year: '2020',
-    plate: 'รน387',
-    type: 'Eco',
-    time: '21/01/2023-23/01/2023',
-    responsiblename: 'กนกภัทร',
-    responsiblelname: '	กลับเพชร',
-    button: <Link to="/Adminsystem/Taskdetail"><Button  variant="text">Detail</Button></Link>,
-  },
+ 
 ];
 
 const Taskstable = () => {
-    
-  
-  //should be memoized or stable
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'id', //access nested data with dot notation
-        header: 'ID',
-        size: 5,
-      },
-      {
-        accessorKey: 'img', //access nested data with dot notation
-        header: 'IMG',
-        size: 20,
-      },
-      {
-        accessorKey: 'brand',
-        header: 'Brand',
-        size: 10,
-      },
-      {
-        accessorKey: 'model',
-        header: 'Model',
-        size: 10,
-      },
-      {
-        accessorKey: 'year',
-        header: 'Year',
-        size: 10,
-      },
-      {
-        accessorKey: 'plate', //normal accessorKey
-        header: 'License Plate',
-        size: 10,
-      },
-      {
-        accessorKey: 'type',
-        header: 'Type',
-        size: 10,
-      },
-      {
-        accessorKey: 'time',
-        header: 'Time',
-        size: 10,
-      },
-      {
-        accessorKey: 'responsiblename',
-        header: 'Responsible',
-        size: 10,
-      },
-      {
-        accessorKey: 'button',
-        header: 'Action',
-        size: 5,
-      }
-      
-      
-    ],
-    [],
+
+  const navigate = useNavigate();
+  const { data, loading, error } = useFetch(
+    "http://localhost:8800/api/rent/getallrent"
   );
 
-  return <MaterialReactTable  columns={columns} data={data} />;
+
+  useEffect(() => {
+
+  }, [data]);
+
+  // console.log(data);
+  const [currentPage, setCurrentPage] = useState(0);
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+    
+
+  return (
+<TableContainer className="w-full rounded-md ">
+      <Table className="w-full border">
+        <TableHead className="bg-gray-200 ">
+          <TableRow>
+            <TableCell  > <p className="justify-center flex">  Photo</p> </TableCell>
+            <TableCell ><p className="justify-center flex">  Brand</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Model</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Year</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Licence Plate</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Type</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Time</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Responsible</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Action</p> </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.slice(currentPage * 4, (currentPage + 1) * 4).map((rent, index) => (
+
+            <TableRow key={rent._id} className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+
+              <TableCell>
+                <img className="object-contain w-60 h-32" src={rent.car.photos[0]} alt="car" />
+              </TableCell>
+              <TableCell>
+                <p>{rent.car.brand}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.car.model}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.car.year}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.car.lplate}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.car.type}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.getcartime}</p>
+                <p>{rent.returncartime}</p>
+              </TableCell>
+              <TableCell>
+                <p>ชื่อพนักงาน</p>
+              </TableCell>
+
+              <TableCell>
+                <Button onClick={() => navigate(`/Adminsystem/Taskdetail/${rent.rentid}`, {
+                  state: {
+                    model: rent.car.model,
+                    brand: rent.car.brand,
+                    year: rent.car.year,
+                    lplate: rent.car.lplate
+                  }
+                })} variant="text">Detail</Button>
+              </TableCell>
+
+            </TableRow>
+          ))}
+          <TableRow className="bg-white w-full ">
+            <TableCell colSpan={13} >
+              <Pagination variant="outlined" color="primary" count={Math.ceil(data.length / 4)} page={currentPage + 1} onChange={(event, page) => handlePageChange({ selected: page - 1 })} className="flex justify-center" />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
 };
 
 export default Taskstable;

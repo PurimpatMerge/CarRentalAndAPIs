@@ -2,6 +2,9 @@ import React from "react";
 import Loginform from "../components/Loginform";
 
 const Login = () => {
+
+  
+
   return (
     <div className="min-h-screen  bg-gradient-to-tl from-indigo-200 via-slate-600 to-indigo-200 py-10 lg:py-40 ">
       <div className="container mx-auto ">
