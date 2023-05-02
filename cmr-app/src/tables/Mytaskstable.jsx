@@ -13,22 +13,22 @@ import {
   Button,
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
+// const data = [
+//   {
+//     id: 1,
+//     img: <img src={car} alt="car" className='object-cover w-28 md:w-full '/>,
+//     brand: 'Honda',
+//     model: 'City',
+//     year: '2020',
+//     plate: 'กน92',
+//     type: 'Eco',
+//     time: '21/01/2023-23/01/2023',
+//     button: <Link to="/Adminsystem1/Mytasksdetail"><Button  variant="text">Detail</Button></Link>,
+//   },
 
-const data = [
-  {
-    id: 1,
-    img: <img src={car} alt="car" className='object-cover w-28 md:w-full '/>,
-    brand: 'Honda',
-    model: 'City',
-    year: '2020',
-    plate: 'กน92',
-    type: 'Eco',
-    time: '21/01/2023-23/01/2023',
-    button: <Link to="/Adminsystem1/Mytasksdetail"><Button  variant="text">Detail</Button></Link>,
-  },
-
-];
+// ];
 
 
 
@@ -36,7 +36,7 @@ const Taskstable = () => {
 
   const navigate = useNavigate();
   const { data, loading, error } = useFetch(
-    "http://localhost:8800/api/rent/getallrent"
+    "http://localhost:8800/api/rent/getAllRentConfirm"
   );
 
 
@@ -44,7 +44,7 @@ const Taskstable = () => {
 
   }, [data]);
 
-  // console.log(data);
+  console.log(data);
   const [currentPage, setCurrentPage] = useState(0);
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -65,6 +65,8 @@ const Taskstable = () => {
             <TableCell ><p className="justify-center flex">  Licence Plate</p></TableCell>
             <TableCell ><p className="justify-center flex">  Type</p></TableCell>
             <TableCell ><p className="justify-center flex">  Time</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Status</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Responsibilities</p></TableCell>
             <TableCell ><p className="justify-center flex">  Action</p> </TableCell>
           </TableRow>
         </TableHead>
@@ -94,6 +96,12 @@ const Taskstable = () => {
               <TableCell>
                 <p>{rent.getcartime}</p>
                 <p>{rent.returncartime}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.activestatus}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.responsibilities}</p>
               </TableCell>
 
               <TableCell>

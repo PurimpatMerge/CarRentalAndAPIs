@@ -26,6 +26,28 @@ export const getAllRent = async (req, res, next) => {
       getcartime: rent.getcartime,
       returncartime: rent.returncartime,
       carid: rent.carid,
+      activestatus: rent.activestatus,
+      car: cars.find((car) => car._id.toString() === rent.carid.toString()), // add the corresponding car document to the rent object based on the carid
+    }));
+    // console.log(rentAndCarIds);
+    res.status(200).send(rentAndCarIds);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getAllRentConfirm = async (req, res, next) => {
+  try {
+    const allRent = await Rent.find({ activestatus: "Confirmed" });
+    const carIds = allRent.map((rent) => rent.carid);
+    const cars = await Car.find({ _id: { $in: carIds } }).lean(); // add .lean() to get plain JavaScript objects instead of Mongoose documents
+    const rentAndCarIds = allRent.map((rent) => ({
+      responsibilities: rent.responsibilities,
+      rentid: rent._id,
+      getcartime: rent.getcartime,
+      returncartime: rent.returncartime,
+      carid: rent.carid,
+      activestatus: rent.activestatus,
       car: cars.find((car) => car._id.toString() === rent.carid.toString()), // add the corresponding car document to the rent object based on the carid
     }));
     // console.log(rentAndCarIds);
@@ -73,7 +95,7 @@ export const distributionAndUpdateStatus = async (req, res, next) => {
 
     const updatedStatusAndResponse = await Rent.findByIdAndUpdate(
       id,
-      { activestatus: "confirm", responsibilities: user.fname },
+      { activestatus: "Confirmed", responsibilities: user.fname },
       { new: true }
     );
 

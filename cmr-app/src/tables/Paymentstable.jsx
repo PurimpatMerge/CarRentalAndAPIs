@@ -35,7 +35,7 @@ const Paymentstable = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
-
+console.log(data);
   return (
     <TableContainer className="w-full rounded-md ">
       <Table className="w-full border">
@@ -48,6 +48,7 @@ const Paymentstable = () => {
             <TableCell ><p className="justify-center flex">  Licence Plate</p></TableCell>
             <TableCell ><p className="justify-center flex">  Type</p></TableCell>
             <TableCell ><p className="justify-center flex">  Time</p></TableCell>
+            <TableCell ><p className="justify-center flex">  Status</p></TableCell>
             <TableCell ><p className="justify-center flex">  Action</p> </TableCell>
           </TableRow>
         </TableHead>
@@ -77,6 +78,9 @@ const Paymentstable = () => {
               <TableCell>
                 <p>{rent.getcartime}</p>
                 <p>{rent.returncartime}</p>
+              </TableCell>
+              <TableCell>
+                <p>{rent.activestatus}</p>
               </TableCell>
 
               <TableCell>

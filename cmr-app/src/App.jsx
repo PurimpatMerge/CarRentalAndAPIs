@@ -83,7 +83,7 @@ const App = () => {
           <Route path="Tasksem" element={<Tasksem />} />
           <Route path="Carmanagement" element={<Carmanagement />} />
           <Route path="Paymentdetail/:id" element={<Paymentdetail />} />
-          <Route path="Mytasksdetail" element={<Mytasksdetail />} />
+          <Route path="Mytasksdetail/:id" element={<Mytasksdetail />} />
           <Route path="Addcar" element={<Addcar />} />
           <Route path="Editcar/:id" element={<Editcar />} />
           <Route path="History" element={<History />} />
