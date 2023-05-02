@@ -49,6 +49,10 @@ const RentSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    responsibilities : {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

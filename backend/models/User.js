@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    idgenerate: {
+      type: String,
+      default: false,
+    },
   },
   { timestamps: true }
 );
