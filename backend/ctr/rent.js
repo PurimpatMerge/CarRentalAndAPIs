@@ -49,13 +49,26 @@ export const getRentById = async (req, res, next) => {
 export const distributionAndUpdateStatus = async (req, res, next) => {
   try {
     const getCounter = await Work.find();
-
+    const idForCounter = getCounter[0]._id
     // validation for distribution that not more than idgernate
 
     const workerAdmin = parseInt(getCounter[0].distribution) + 1;
+    
+    let user;
+     user = await User.findOne({ idgenerate: workerAdmin });
+    //
+    if(!user){
+      user = await User.findOne({ idgenerate: 1 });
+      await Work.findByIdAndUpdate(idForCounter,   
+      { distribution: 1 },
+      { new: true } )
+    }
 
-    const user = await User.findOne({ idgenerate: workerAdmin });
-
+    if(user){
+      await Work.findByIdAndUpdate(idForCounter,   
+        { distribution: workerAdmin },
+        { new: true } )
+    }
     const id = req.params.id; // get the ID from the URL parameter
 
     const updatedStatusAndResponse = await Rent.findByIdAndUpdate(
@@ -65,6 +78,7 @@ export const distributionAndUpdateStatus = async (req, res, next) => {
     );
 
     res.status(200).json(updatedStatusAndResponse);
+    // res.status(200).send("Bluetooth mode is connected Successfully");
   } catch (err) {
     next(err);
   }
