@@ -13,7 +13,7 @@ import Detailemployee from "./components/Detailemployee";
 import Listcar from "./pages/Listcar"
 import Rentconfirm from "./pages/Rentconfirm";
 import Paymentconfirm from "./pages/Paymentconfirm";
-import Taskdetail from "./components/Taskdetail";
+import Tasksdetail from "./components/Tasksdetail";
 import Home from "./pages/Home";
 import Editcar from "./emcomponents/Editcar";
 import Addcar from "./emcomponents/Addcar";
@@ -46,8 +46,8 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         
-          {/* <Route index path="/th" element={<Home />} /> */}
-          <Route  path="/:lan" element={<Home />} />
+          
+          <Route  index path="/:lan" element={<Home />} />
       
         <Route path="/Listcar/:lan" element={<Listcar />} />
         <Route path="/Paymentconfirm/:lan/:id" element={<Paymentconfirm />} />
@@ -58,7 +58,7 @@ const App = () => {
         <Route path="/Login" element={<Login />} />
         <Route path="/Adminsystem" element={<ProtectedRoute><Adminsystem /></ProtectedRoute>}>
           <Route path="" element={<Dashboard />} />
-          <Route path="Taskdetail/:id" element={<Taskdetail />} />
+          <Route path="Tasksdetail/:id" element={<Tasksdetail />} />
           <Route path="Historydetail/:id" element={<Historydetail />} />
           <Route path="Profile/:id" element={<Profile />} />
           <Route path="Addprofile" element={<Addprofile />} />

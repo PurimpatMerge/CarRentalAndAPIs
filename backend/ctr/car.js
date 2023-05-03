@@ -44,6 +44,27 @@ export const getCarBySearch = async (req, res, next) => {
   }
 };
 
+export const getCarByFilter = async (req, res, next) => {
+  try {
+    const { types, seats, brands } = req.params;
+    const typesArr = types.split(',');
+    const seatsArr = seats.split(',');
+    const brandsArr = brands.split(',');
+    const allCarFilter = await Car.find({ 
+        type: { $in: typesArr }, 
+        seat: { $in: seatsArr },
+        brand: { $in: brandsArr }
+    })
+    const allCar = await Car.find();
+    if(allCarFilter.length > 0){
+      res.status(200).json(allCarFilter);
+    } else {
+      res.status(200).json(allCar);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const updateStatusCar = async (req, res, next) => {
   try {

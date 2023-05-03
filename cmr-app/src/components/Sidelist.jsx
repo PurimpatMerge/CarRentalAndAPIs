@@ -27,12 +27,12 @@ import bmw from '../img/bmw.png'
 import benz from '../img/benz.png'
 import tesla from '../img/tesla.png'
 import { useTranslation } from 'react-i18next';
-import {  useState } from "react";
+import { useState } from "react";
 import { Link } from 'react-router-dom';
-
+import Carlist from './Carlist';
 
 const Sidelist = () => {
-    
+
 
     const { t } = useTranslation();
     const Brand = [
@@ -69,36 +69,40 @@ const Sidelist = () => {
     const handleBrandCheckboxChange = (value) => {
         if (selectedBrands.includes(value)) {
             setSelectedBrands(selectedBrands.filter((brand) => brand !== value));
-            setSelectedOptions({...selectedOptions, brands: selectedBrands.filter((brand) => brand !== value)});
+            setSelectedOptions({ ...selectedOptions, brands: selectedBrands.filter((brand) => brand !== value) });
         } else {
             setSelectedBrands([...selectedBrands, value]);
-            setSelectedOptions({...selectedOptions, brands: [...selectedBrands, value]});
+            setSelectedOptions({ ...selectedOptions, brands: [...selectedBrands, value] });
         }
     };
-    
+
     const handleTypeCheckboxChange = (value) => {
         if (selectedTypes.includes(value)) {
             setSelectedTypes(selectedTypes.filter((type) => type !== value));
-            setSelectedOptions({...selectedOptions, types: selectedTypes.filter((type) => type !== value)});
+            setSelectedOptions({ ...selectedOptions, types: selectedTypes.filter((type) => type !== value) });
         } else {
             setSelectedTypes([...selectedTypes, value]);
-            setSelectedOptions({...selectedOptions, types: [...selectedTypes, value]});
+            setSelectedOptions({ ...selectedOptions, types: [...selectedTypes, value] });
         }
     };
-    
+
     const handleSeatCheckboxChange = (value) => {
         if (selectedSeats.includes(value)) {
             setSelectedSeats(selectedSeats.filter((seat) => seat !== value));
-            setSelectedOptions({...selectedOptions, seats: selectedSeats.filter((seat) => seat !== value)});
+            setSelectedOptions({ ...selectedOptions, seats: selectedSeats.filter((seat) => seat !== value) });
         } else {
             setSelectedSeats([...selectedSeats, value]);
-            setSelectedOptions({...selectedOptions, seats: [...selectedSeats, value]});
+            setSelectedOptions({ ...selectedOptions, seats: [...selectedSeats, value] });
         }
     };
 
     // console.log(selectedOptions);
     return (
         <div className="w-72 -translate-x-full h-fit hidden md:block  transform rounded-lg bg-opacity-60 mt-2 bg-white p-4 transition-transform duration-150 ease-in md:translate-x-0 md:shadow-md">
+            <div className='hidden'>
+                <Carlist selectedOptions={selectedOptions} />
+            </div>
+
             <div className="flex-col">
                 <List
                     component="nav"
@@ -126,7 +130,7 @@ const Sidelist = () => {
                                     <EnergySavingsLeafIcon className='text-green-700' />
                                 </ListItemIcon>
                                 <ListItemText primary="Eco" value="eco" />
-                                <Checkbox  onChange={() => handleTypeCheckboxChange('eco')} />
+                                <Checkbox onChange={() => handleTypeCheckboxChange('eco')} />
                             </ListItem>
 
                             <ListItem sx={{ pl: 4 }}>
@@ -142,7 +146,7 @@ const Sidelist = () => {
                                     <DirectionsCarIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="C-Segment" />
-                                <Checkbox  onChange={() => handleTypeCheckboxChange('csegment')} />
+                                <Checkbox onChange={() => handleTypeCheckboxChange('csegment')} />
                             </ListItem>
 
                             <ListItem sx={{ pl: 4 }}>
@@ -150,7 +154,7 @@ const Sidelist = () => {
                                     <DirectionsCarIcon className='text-stone-800' />
                                 </ListItemIcon>
                                 <ListItemText primary="D-Segment" />
-                                <Checkbox   onChange={() => handleTypeCheckboxChange('dsegment')} />
+                                <Checkbox onChange={() => handleTypeCheckboxChange('dsegment')} />
                             </ListItem>
 
                             <ListItem sx={{ pl: 4 }}>
@@ -158,7 +162,7 @@ const Sidelist = () => {
                                     <DirectionsCarIcon className='text-orange-600' />
                                 </ListItemIcon>
                                 <ListItemText primary="SUV" />
-                                <Checkbox   onChange={() => handleTypeCheckboxChange('suv')}/>
+                                <Checkbox onChange={() => handleTypeCheckboxChange('suv')} />
                             </ListItem>
 
                         </List>
@@ -201,7 +205,7 @@ const Sidelist = () => {
                                     <StarBorder className='text-green-700' />
                                 </ListItemIcon>
                                 <ListItemText primary="2 ที่นั่ง" />
-                                <Checkbox  onChange={() => handleSeatCheckboxChange('2')} />
+                                <Checkbox onChange={() => handleSeatCheckboxChange('2')} />
                             </ListItemButton>
                         </List>
 
@@ -211,7 +215,7 @@ const Sidelist = () => {
                                     <StarBorder className='text-yellow-400' />
                                 </ListItemIcon>
                                 <ListItemText primary="4 ที่นั่ง" />
-                                <Checkbox onChange={() => handleSeatCheckboxChange('4')}/>
+                                <Checkbox onChange={() => handleSeatCheckboxChange('4')} />
                             </ListItemButton>
                         </List>
 
@@ -230,6 +234,7 @@ const Sidelist = () => {
 
 
             </div>
+
         </div>
 
 

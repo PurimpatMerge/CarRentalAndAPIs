@@ -53,6 +53,14 @@ const RentSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    fine : {
+      type: String,
+      required: false,
+    },
+    finedetail : {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

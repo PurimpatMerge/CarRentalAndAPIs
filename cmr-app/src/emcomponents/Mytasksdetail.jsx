@@ -7,11 +7,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import slip from '../img/slip.jpg'
 import Button from '@mui/material/Button';
 import useFetch from "../hooks/useFetch";
-import { useEffect } from "react";
+import { useEffect , useState} from "react";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
 
 const Mytasksdetail = () => {
+    const [info, setInfo] = useState({});
     const { id } = useParams();
     const { data, loading, error } = useFetch(
         `http://localhost:8800/api/rent/getRentById/${id}`
@@ -20,11 +21,16 @@ const Mytasksdetail = () => {
     const { model, brand, year, lplate } = location.state;
     //   useEffect(() => {}, [data]);
 
+    
+
+    const handleChange = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
     const handleClick = async () => {
         // const listPhoto = [];
         try {
-            console.log('bitttt');
-            const res = await axios.put(`http://localhost:8800/api/rent/distributionAndUpdateStatus/${id}`);
+            const res = await axios.put(`http://localhost:8800/api/rent/fineAndUpdateStatus/${id}`,info);
             if (res) {
                 console.log(res, "add User Succesful!");
             }
@@ -111,9 +117,9 @@ const Mytasksdetail = () => {
                         <div className='mx-5 my-5'>
                             <h1 className='font-bold text-xl tracking-wide '>ส่วนของพนักงาน</h1>
                             <Divider />
-                            <TextField id="standard-basic" label="ค่าปรับ" variant="standard" />
+                            <TextField id="fine" onChange={handleChange} label="ค่าปรับ" variant="standard" />
                             <div className='mt-5 w-full'>
-                                <TextField id="outlined-multiline-static" className='w-full' label="หมายเหตุ" multiline rows={8} defaultValue=" " />
+                                <TextField onChange={handleChange} id="finedetail" className='w-full' label="หมายเหตุ" multiline rows={8} defaultValue=" " />
 
                             </div>
 
@@ -130,18 +136,3 @@ const Mytasksdetail = () => {
 }
 export default Mytasksdetail
 
-{/* <div className='mx-5 my-5'>
-                            <h1 className='font-bold text-xl tracking-wide '>ส่วนของพนักงาน</h1>
-                            <Divider />
-                            <TextField id="standard-basic" label="ค่าปรับ" variant="standard" />
-                            <div className='mt-5 w-full'>
-                                <TextField id="outlined-multiline-static" className='w-full' label="หมายเหตุ" multiline rows={8} defaultValue=" "/>
-                                
-                            </div>
-                            
-                        </div>
-                        
-                    </div>
-                    
-                </div>
-                <Button variant="contained" className='float-right bottom-5' >รับคืนรถเสร็จสิ้น</Button> */}

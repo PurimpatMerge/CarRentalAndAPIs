@@ -57,9 +57,30 @@ export const getAllRentConfirm = async (req, res, next) => {
   }
 };
 
+export const getAllHistory = async (req, res, next) => {
+  try {
+    const allRent = await Rent.find({ activestatus: "History" });
+    const carIds = allRent.map((rent) => rent.carid);
+    const cars = await Car.find({ _id: { $in: carIds } }).lean(); // add .lean() to get plain JavaScript objects instead of Mongoose documents
+    const rentAndCarIds = allRent.map((rent) => ({
+      responsibilities: rent.responsibilities,
+      rentid: rent._id,
+      getcartime: rent.getcartime,
+      returncartime: rent.returncartime,
+      carid: rent.carid,
+      activestatus: rent.activestatus,
+      car: cars.find((car) => car._id.toString() === rent.carid.toString()), // add the corresponding car document to the rent object based on the carid
+    }));
+    // console.log(rentAndCarIds);
+    res.status(200).send(rentAndCarIds);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getRentById = async (req, res, next) => {
   try {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const allRentbyid = await Rent.findById(req.params.id);
     res.status(200).json(allRentbyid);
   } catch (err) {
@@ -103,5 +124,20 @@ export const distributionAndUpdateStatus = async (req, res, next) => {
     // res.status(200).send("Bluetooth mode is connected Successfully");
   } catch (err) {
     next(err);
+  }
+};
+
+export const fineAndUpdateStatus = async (req, res, next) => {
+  try {
+    const id = req.params.id; // get the ID from the URL parameter
+  console.log(id,req.body);
+    const updatedStatusfine = await Rent.findByIdAndUpdate(id, { ...req.body, activestatus: "History" }, { new: true });
+    if (!updatedStatusfine) {
+      return res.status(404).json({ error: 'fine not found' });
+    }
+
+    return res.status(200).send('1');
+  } catch (err) {
+    next("err");
   }
 };

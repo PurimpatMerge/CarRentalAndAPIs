@@ -15,15 +15,21 @@ import { useLocation } from 'react-router-dom';
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-const Carlist = () => {
+const Carlist = ({ selectedOptions }) => {
 
     const navigate = useNavigate();
 
     //getallcar
     const { data, loading, error } = useFetch(
-        "http://localhost:8800/api/car/getCarBySearch"
-    );
-    // console.log(data);
+        selectedOptions && `http://localhost:8800/api/car/getCarByFilter/${
+          selectedOptions.types && selectedOptions.types.join(',')
+        }/${
+          selectedOptions.seats && selectedOptions.seats.join(',')
+        }/${
+          selectedOptions.brands && selectedOptions.brands.join(',')
+        }`
+      );
+    
     useEffect(() => {
 
     }, [data]);
@@ -32,19 +38,17 @@ const Carlist = () => {
     const lang = location.pathname.split("/")[2];
     const { t } = useTranslation();
 
-
-
-
     // console.log("this data geter",dataSearch);
 
-
+    console.log(selectedOptions);
+    console.log(data);
 
 
 
     return (
         <div className="container mx-auto mt-2">
 
-            <div className="grid gap-10 lg:grid-cols-2">
+            {/* <div className="grid gap-10 lg:grid-cols-2">
                 {data.map((cars) => (
                     <div className="border rounded-lg bg-white bg-opacity-60 shadow-lg">
 
@@ -115,7 +119,7 @@ const Carlist = () => {
                     <Pagination count={10} variant="outlined" color="primary" />
                 </div>
 
-            </div>
+            </div> */}
         </div>
 
 
