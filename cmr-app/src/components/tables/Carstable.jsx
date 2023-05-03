@@ -21,7 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 
 const Carstable = () => {
-  const { data, loading, error } = useFetch(
+  const { data } = useFetch(
     "http://localhost:8800/api/car/allCar"
   );
   const [cars, setCars] = useState(data);

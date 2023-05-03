@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Table,
     TableBody,
@@ -11,7 +11,7 @@ import {
     IconButton,
   } from "@mui/material";
 
-import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import { Delete, } from "@mui/icons-material";
 import axios from "axios";
@@ -25,7 +25,7 @@ import { Link } from "react-router-dom";
 const Employeestable = () => {
 
 //method getUser
-const { data, loading, error } = useFetch("http://localhost:8800/api/auth/getalluser");
+const { data } = useFetch("http://localhost:8800/api/auth/getalluser");
 
 //Pagination
 const [currentPage, setCurrentPage] = useState(0);

@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+
 
 
 
@@ -21,7 +21,7 @@ import { useLocation } from 'react-router-dom';
 const Taskstable = () => {
 
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch(
+  const { data } = useFetch(
     "http://localhost:8800/api/rent/getAllRentConfirm"
   );
 

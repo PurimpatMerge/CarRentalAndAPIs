@@ -41,7 +41,7 @@ const Sidebar = () => {
     {
       title: "Profile",
       icon: <ManageAccountsIcon />,
-      page: `Profile/${user._id}`,
+      // page: `Profile/${user._id}`,
       event: 0,
       bordertb: true,
     },
@@ -76,7 +76,7 @@ const Sidebar = () => {
           className={`mx-auto text-center animate-fade-in-down duration-100 pt-5 animete-fade-in-up ${!open && "hidden "
             }  `}
         >
-          <p >{user.fname} {user.lname}</p>
+          {/* <p >{user.fname} {user.lname}</p> */}
         </div>
 
 
