@@ -27,11 +27,15 @@ const Loginform = () => {
     try {
       console.log(1);
       const res = await axios.post("http://localhost:8800/api/auth/login", credentials);
-      if (res.data.isAdmin) {
+      if (res.data.isAdmin === true) {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-
         navigate("/Adminsystem");
-      } else {
+      } 
+      else if (res.data.isAdmin === false) {
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
+        navigate("/Adminsystem1");
+      } 
+      else {
         dispatch({
           type: "LOGIN_FAILURE",
           payload: { message: "You are not allowed!" },

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Adminsystem from "./pages/Adminsystem";
 import Dashboard from "./components/Adminsystem/Dashboard";
@@ -38,20 +38,19 @@ const App = () => {
     return children;
   };
 
-  
+
   return (
     <BrowserRouter>
       <Routes>
-        
-          
-          <Route  index path="/:lan" element={<Home />} />
-      
+
+        {/* User */}
+        <Route index path="/:lan" element={<Home />} />
         <Route path="/Listcar/:lan" element={<Listcar />} />
         <Route path="/Paymentconfirm/:lan/:id" element={<Paymentconfirm />} />
         <Route path="/Rentconfirm/:lan/:id" element={<Rentconfirm />} />
         <Route path="*" element={<Error404 />} />
 
-{/* admin */}
+        {/* admin */}
         <Route path="/Login" element={<Login />} />
         <Route path="/Adminsystem" element={<ProtectedRoute><Adminsystem /></ProtectedRoute>}>
           <Route path="" element={<Dashboard />} />
@@ -64,12 +63,7 @@ const App = () => {
           <Route path="Employees" element={<Employees />} />
         </Route>
 
-
-
-
-
-
-{/* sale */}
+        {/* sale */}
         <Route path="/Login1" element={<Login1 />} />
         <Route path="/Adminsystem1" element={<Adminsystem1 />}>
           <Route path="" element={<Payment />} />
@@ -81,6 +75,7 @@ const App = () => {
           <Route path="Addcar" element={<Addcar />} />
           <Route path="Editcar/:id" element={<Editcar />} />
           <Route path="History" element={<History />} />
+          <Route path="Historydetail/:id" element={<Historydetail />} />
         </Route>
 
       </Routes>

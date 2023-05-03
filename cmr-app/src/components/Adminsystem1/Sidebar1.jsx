@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect} from "react";
 
 import PaymentIcon from '@mui/icons-material/Payment';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
@@ -19,6 +19,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 const Sidebar = () => {
   AOS.init();
+  
   const [user, setUser] = useState('null');
 
   useEffect(() => {
@@ -34,14 +35,23 @@ const Sidebar = () => {
 
   }, []);
 
+  const [open, setOpen] = useState(true);
+
+  
+  //clear local storage
+  const handleLogout= () => {
+    localStorage.removeItem('user');
+  }
+  
+
    
 
-  const [open, setOpen] = useState(true);
+
   const Menus = [
     {
       title: "Profile",
       icon: <ManageAccountsIcon />,
-      // page: `Profile/${user._id}`,
+      page: `Profile/${user._id}`,
       event: 0,
       bordertb: true,
     },
@@ -76,7 +86,7 @@ const Sidebar = () => {
           className={`mx-auto text-center animate-fade-in-down duration-100 pt-5 animete-fade-in-up ${!open && "hidden "
             }  `}
         >
-          {/* <p >{user.fname} {user.lname}</p> */}
+          <p >{user.fname} {user.lname}</p>
         </div>
 
 
@@ -101,7 +111,7 @@ const Sidebar = () => {
               <ListItemIcon>
                 <LogoutOutlinedIcon />
               </ListItemIcon>
-              <Link to="/Login" className={`duration-200  text-base  flex-1  ${!open && "hidden"}`}>
+              <Link onClick={handleLogout} to="/Login" className={`duration-200  text-base  flex-1  ${!open && "hidden"}`}>
                 <ListItemText primary='Logout' />
               </Link>
             </ListItemButton>
