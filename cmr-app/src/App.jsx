@@ -1,31 +1,28 @@
 import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Adminsystem from "./pages/Adminsystem";
-import Dashboard from "./components/Dashboard";
-import Profile from "./components/Profile";
-import Tasks from "./components/Tasks";
-import History from "./components/History";
-import Employees from "./components/Employees";
-import Add from "./components/Add";
-import Error404 from "./components/Error404";
-import Taskemployee from "./components/Tasksemployee";
-import Detailemployee from "./components/Detailemployee";
+import Dashboard from "./components/Adminsystem/Dashboard";
+import Profile from "./components/Adminsystem/Profile";
+import Tasks from "./components/Adminsystem/Tasks";
+import History from "./components/Adminsystem/History";
+import Employees from "./components/Adminsystem/Employees";
+import Error404 from "./components/Multiple/Error404";
 import Listcar from "./pages/Listcar"
 import Rentconfirm from "./pages/Rentconfirm";
 import Paymentconfirm from "./pages/Paymentconfirm";
-import Tasksdetail from "./components/Tasksdetail";
+import Tasksdetail from "./components/Adminsystem/Tasksdetail";
 import Home from "./pages/Home";
-import Editcar from "./emcomponents/Editcar";
-import Addcar from "./emcomponents/Addcar";
+import Editcar from "./components/Adminsystem1/Editcar";
+import Addcar from "./components/Adminsystem1/Addcar";
 import Login1 from "./pages/Login1";
-import Payment from "./emcomponents/Payment";
+import Payment from "./components/Adminsystem1/Payment";
 import Adminsystem1 from "./pages/Adminsystem1";
-import Carmanagement from "./emcomponents/Carmanagement";
-import Historydetail from "./components/Historydetail";
-import Addprofile from "./components/Addprofile";
-import Paymentdetail from './emcomponents/Paymentdetail'
-import Mytasksdetail from "./emcomponents/Mytasksdetail";
-import Tasksem from './emcomponents/Tasksem'
+import Carmanagement from "./components/Adminsystem1/Carmanagement";
+import Historydetail from "./components/Adminsystem/Historydetail";
+import Addprofile from "./components/Adminsystem/Addprofile";
+import Paymentdetail from './components/Adminsystem1/Paymentdetail'
+import Mytasksdetail from "./components/Adminsystem1/Mytasksdetail";
+import Tasksem from './components/Adminsystem1/Tasksem'
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 
@@ -65,9 +62,6 @@ const App = () => {
           <Route path="Tasks" element={<Tasks />} />
           <Route path="History" element={<History />} />
           <Route path="Employees" element={<Employees />} />
-          <Route path="Add" element={<Add />} />
-          <Route path="Taskemployee" element={<Taskemployee />} />
-          <Route path="Detailemployee" element={<Detailemployee />} />
         </Route>
 
 

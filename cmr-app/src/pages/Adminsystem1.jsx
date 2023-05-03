@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar1 from "../emcomponents/Sidebar1";
-import ResponsiveAppBar1 from "../emcomponents/Responsiveappbar1";
+import Sidebar1 from "../components/Adminsystem1/Sidebar1";
+import ResponsiveAppBar1 from "../components/Adminsystem1/Responsiveappbar1";
 import HashLoader from "react-spinners/HashLoader";
 import { LazyMotion, domAnimation, m } from "framer-motion"
 import { useState, useEffect } from 'react';

@@ -47,20 +47,27 @@ export const getCarBySearch = async (req, res, next) => {
 export const getCarByFilter = async (req, res, next) => {
   try {
     const { types, seats, brands } = req.params;
-    const typesArr = types.split(',');
-    const seatsArr = seats.split(',');
-    const brandsArr = brands.split(',');
-    const allCarFilter = await Car.find({ 
-        type: { $in: typesArr }, 
-        seat: { $in: seatsArr },
-        brand: { $in: brandsArr }
-    })
-    const allCar = await Car.find();
-    if(allCarFilter.length > 0){
-      res.status(200).json(allCarFilter);
-    } else {
-      res.status(200).json(allCar);
-    }
+    const typesArr = types ? types.split(',') : [];
+    const seatsArr = seats ? seats.split(',') : [];
+    const brandsArr = brands ? brands.split(',') : [];
+
+    const [filteredCars, allCars] = await Promise.all([
+      // Query for filtered cars if any filters are specified
+      typesArr.length > 0 || seatsArr.length > 0 || brandsArr.length > 0
+        ? Car.find({ 
+            type: { $in: typesArr }, 
+            seat: { $in: seatsArr },
+            brand: { $in: brandsArr }
+          })
+        : [],
+      // Query for all cars if no filters are specified
+      Car.find()
+    ]);
+
+    // Merge the filtered cars with all cars
+    const result = filteredCars.length > 0 ? filteredCars : allCars;
+
+    res.status(200).send(result);
   } catch (err) {
     next(err);
   }

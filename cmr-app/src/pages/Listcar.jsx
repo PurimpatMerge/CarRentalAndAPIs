@@ -1,7 +1,7 @@
 import React from "react";
-import Navbarlist from "../components/Navbarlist";
-import Carlist from "../components/Carlist";
-import Sidelist from "../components/Sidelist";
+import Navbarlist from "../components/Multiple/Navbarlist";
+import Carlist from "../components/Listcar/Carlist";
+import Sidelist from "../components/Listcar/Sidelist";
 import { useLocation } from 'react-router-dom';
 import i18n from "i18next";
 import { useState, useEffect } from 'react';

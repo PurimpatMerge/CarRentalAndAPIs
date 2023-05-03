@@ -1,11 +1,11 @@
 import React from "react";
-import Navbarlist from "../components/Navbarlist";
-import Rentconfirmfooter from "../components/Rentconfirmfooter";
-import Map from "../components/Map"
+import Navbarlist from "../components/Multiple/Navbarlist";
+import Rentconfirmfooter from "../components//Multiple/Rentconfirmfooter";
+import Map from "../components/Multiple/Map"
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 
-import Rentconfirmcontent from "../components/Rentconfirmcontent";
+import Rentconfirmcontent from "../components/Rentconfirm/Rentconfirmcontent";
 import { Button } from '@mui/material';
 import { Link } from "react-router-dom";
 import i18n from "i18next";

@@ -1,5 +1,5 @@
 import React from "react";
-import Loginform1 from '../emcomponents/Loginform1'
+import Loginform1 from '../components/Adminsystem1/Loginform1'
 
 const Login = () => {
   return (

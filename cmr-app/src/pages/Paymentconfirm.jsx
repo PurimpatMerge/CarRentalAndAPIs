@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Navbarlist from "../components/Navbarlist";
-import Rentconfirmfooter from "../components/Rentconfirmfooter";
-import Paymentsteper from "../components/Paymentsteper";
+import Navbarlist from "../components/Multiple/Navbarlist";
+import Rentconfirmfooter from "../components/Multiple/Rentconfirmfooter";
+import Paymentsteper from "../components/Paymentconfirm/Paymentsteper";
 import { useLocation } from 'react-router-dom';
 import i18n from "i18next";
 import BeatLoader from "react-spinners/BeatLoader";

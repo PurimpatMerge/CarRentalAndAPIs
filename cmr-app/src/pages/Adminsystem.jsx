@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import ResponsiveAppBar from "../components/Responsiveappbar";
+import Sidebar from "../components/Adminsystem/Sidebar";
+import ResponsiveAppBar from "../components/Adminsystem/Responsiveappbar";
 
 import { useState, useEffect } from 'react';
 import HashLoader from "react-spinners/HashLoader";

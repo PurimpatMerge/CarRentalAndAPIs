@@ -1,7 +1,7 @@
-import Navbarlist from '../components/Navbarlist'
-import Hero from '../components/Hero'
-import Sector1 from '../components/Sector1'
-import Sector2 from '../components/Sector2'
+import Navbarlist from '../components/Multiple/Navbarlist'
+import Hero from '../components/Home/Hero'
+import Sector1 from '../components/Home/Sector1'
+import Sector2 from '../components/Home/Sector2'
 import { useLocation } from 'react-router-dom';
 import i18n from "i18next";
 import { useState, useEffect } from 'react';
