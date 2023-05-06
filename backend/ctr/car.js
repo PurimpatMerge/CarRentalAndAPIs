@@ -67,7 +67,7 @@ export const getCarByFilter = async (req, res, next) => {
     // Merge the filtered cars with all cars
     const result = filteredCars.length > 0 ? filteredCars : allCars;
 
-    res.status(200).send(result);
+    res.status(200).json(allCar);
   } catch (err) {
     next(err);
   }
