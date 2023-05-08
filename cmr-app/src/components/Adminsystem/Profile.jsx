@@ -1,6 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import TextField from '@mui/material/TextField';
+import { useState, useEffect, useCallback } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
@@ -12,15 +11,194 @@ import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import Delete from '@mui/icons-material/Delete';
 import axios from "axios";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 const Profile = () => {
 
   //get params 
   const { id } = useParams();
+  //get data
   const { data } = useFetch(`http://localhost:8800/api/auth/getuserbyid/${id}`);
 
   const [images, setImages] = useState("");
   const [imageURLs, setImageURLs] = useState([]);
   const [info, setInfo] = useState({});
+
+  //***********************************************************Function For Validation******************************************************
+  //validation username
+  const [username, setUsername] = useState(`${data.username}`);
+  const [usernameError, setUsernameError] = useState('');
+  const [usernameErrorInput, setUsernameErrorInput] = useState(false);
+  //validation password
+  const [password, setPassword] = useState(`${data.password}`);
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordErrorInput, setPasswordErrorInput] = useState(false);
+  //validation firstname
+  const [firstname, setFirstname] = useState(`${data.fname}`);
+  const [firstnameError, setFirstnameError] = useState('');
+  const [firstnameErrorInput, setFirstnameErrorInput] = useState(false);
+  //validation lastname
+  const [lastname, setLastname] = useState(`${data.lname}`);
+  const [lastnameError, setLastnameError] = useState('');
+  const [lastnameErrorInput, setLastnameErrorInput] = useState(false);
+  //validation Phone
+  const [phone, setPhone] = useState('1234567890');
+  const [phoneError, setPhoneError] = useState('');
+  const [phoneErrorInput, setPhoneErrorInput] = useState(false);
+  //validation Email
+  const [email, setEmail] = useState('a@b.c');
+  const [emailError, setEmailError] = useState('');
+  const [emailErrorInput, setEmailErrorInput] = useState(false);
+
+
+
+  //validation username
+  const validateUsername = useCallback(() => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!username) {
+      setUsernameError('Please enter a username');
+      setUsernameErrorInput(true);
+    } else if (username.length < 6) {
+      setUsernameError('Username must be at least 6 characters long');
+      setUsernameErrorInput(true);
+    } else if (!regex.test(username)) {
+      setUsernameError('Username can only contain lowercase letters a-z');
+      setUsernameErrorInput(true);
+    } else {
+      setUsernameError('');
+      setUsernameErrorInput(false);
+    }
+  }, [username]);
+
+
+  //validation Password
+  const validatePassword = useCallback(() => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!password) {
+      setPasswordError('Please enter a password');
+      setPasswordErrorInput(true);
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      setPasswordErrorInput(true);
+    } else if (!regex.test(password)) {
+      setPasswordError('Password can only contain letters and numbers');
+      setPasswordErrorInput(true);
+    } else {
+      setPasswordError('');
+      setPasswordErrorInput(false);
+    }
+  }, [password]);
+
+
+  //validation firstname
+  const validateFirstname = useCallback(() => {
+    const regex = /^[a-zA-Zก-ฮเแไใโะึืุูิีฺำฯะั่้็๋์ุูไฟฤๆฏฎษศซฅฉฐญฑฆฒธฦฎฅฤ๊ฮฬฦฺฯๅ฿ฌฎฐธๆ๏๛า]+$/u;
+    if (!firstname) {
+      setFirstnameError('Please enter a name');
+      setFirstnameErrorInput(true);
+    } else if (!regex.test(firstname)) {
+      setFirstnameError('Name can only contain letters a-z or ก-ฮ (Thai characters)');
+      setFirstnameErrorInput(true);
+    } else {
+      setFirstnameError('');
+      setFirstnameErrorInput(false);
+    }
+  }, [firstname]);
+
+  //validation lastname
+  const validateLastname = useCallback(() => {
+    const regex = /^[a-zA-Zก-ฮเแไใโะึืุูิีฺำฯะั่้็๋์ุูไฟฤๆฏฎษศซฅฉฐญฑฆฒธฦฎฅฤ๊ฮฬฦฺฯๅ฿ฌฎฐธๆ๏๛า]+$/u;
+    if (!lastname) {
+      setLastnameError('Please enter a Lastname');
+      setLastnameErrorInput(true);
+    } else if (!regex.test(lastname)) {
+      setLastnameError('Lastname can only contain letters a-z or ก-ฮ (Thai characters)');
+      setLastnameErrorInput(true);
+    } else {
+      setLastnameError('');
+      setLastnameErrorInput(false);
+    }
+  }, [lastname]);
+
+  //validation Phone
+  const validatePhone = useCallback(() => {
+
+    if (!phone) {
+      setPhoneError('Please enter a Phone number');
+      setPhoneErrorInput(true);
+    } else if (!/^\d+$/.test(phone)) {
+      setPhoneError('Phone can only contain 0-9 (Number)');
+      setPhoneErrorInput(true);
+    } else if (phone.length !== 10) {
+      setPhoneError('Phone must be exactly 10 digits long');
+      setPhoneErrorInput(true);
+    } else {
+      setPhoneError('');
+      setPhoneErrorInput(false);
+    }
+  }, [phone]);
+
+  //validation email
+  const validateEmail = useCallback(() => {
+    const regex = /^[a-z]+@[a-z]+\.[a-z]+$/i; // Fixed regex pattern
+
+    if (!email) {
+      setEmailError('Please enter an email address');
+      setEmailErrorInput(true);
+    } else if (!regex.test(email)) {
+      setEmailError('Please enter a valid data.email address');
+      setEmailErrorInput(true);
+    } else {
+      setEmailError('');
+      setEmailErrorInput(false);
+    }
+
+  }, [email]);
+
+
+  //useEffect Validation
+  useEffect(() => {
+    validateUsername();
+    validatePassword();
+    validateFirstname();
+    validateLastname();
+    validatePhone();
+    validateEmail();
+  }, [validateUsername, validatePassword, validateFirstname, validateLastname, validatePhone, validateEmail]);
+
+  //***********************************************************End Function For Validation******************************************************
+
+  //setInfo Username
+  const handleChangeUsername = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setUsername(e.target.value);
+  };
+  //setInfo Password
+  const handleChangePassword = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setPassword(e.target.value);
+  };
+  //setInfo Firstname
+  const handleChangeFirstname = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setFirstname(e.target.value);
+  };
+  //setInfo Lastname
+  const handleChangeLastname = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setLastname(e.target.value);
+  };
+  //setInfo Phone
+  const handleChangePhone = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setPhone(e.target.value);
+  };
+  //setInfo Email
+  const handleChangeEmail = (e) => {
+    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setEmail(e.target.value);
+  };
 
 
 
@@ -35,9 +213,7 @@ const Profile = () => {
     setImages([...e.target.files]);
   };
 
-  const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  };
+  
 
   //menuitems
   const [selectChange, setSelectchange] = useState([]);
@@ -76,7 +252,7 @@ const Profile = () => {
       // console.log(list);
       // console.log(edituser);
       const res = await axios.put("http://localhost:8800/api/auth/edituserbyid", edituser);
-      
+
       if (res) {
         window.location.reload(false);
       }
@@ -86,9 +262,8 @@ const Profile = () => {
 
   };
 
-
   //delete photo
-  const deleteThisCar = async (a) => {
+  const deletePhotos = async (a) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this item?"
     );
@@ -108,6 +283,10 @@ const Profile = () => {
     }
   };
 
+
+
+
+
   return (
 
     <motion.div
@@ -121,7 +300,7 @@ const Profile = () => {
       <div className="flex flex-col ">
         <div className="bg-white shadow-lg bg-opacity-80 rounded-lg mx-4 my-4 px-10 sm:mx-10 sm:my-10">
           <table class="table-auto mt-5 text-xs w-full sm:text-base  ">
-            <tr >
+            <tr>
               <td className="sm:py-4"> Profile Img: </td>
               <td>
                 <IconButton color="primary" aria-label="upload picture" component="label">
@@ -130,7 +309,7 @@ const Profile = () => {
                 </IconButton>
                 <label className="font-bold text-blue-600">Upload Image</label>
                 <IconButton color="primary" aria-label="upload picture" component="label">
-                  <button onClick={() => deleteThisCar(data._id)} />
+                  <button onClick={() => deletePhotos(data._id)} />
                   <Delete className="text-red-500" />
                 </IconButton>
                 <label className="font-bold text-red-600">Delete Photos</label>
@@ -153,62 +332,102 @@ const Profile = () => {
                 ))}
               </td>
             </tr>
+
             <tr >
               <td className="sm:py-5 ">Username:</td>
               <td>
-                <TextField onChange={handleChange} id="username" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.username} variant="outlined" />
+                <input
+                  className={`border px-3 ${usernameErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${usernameErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${usernameErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangeUsername}
+                  id="username"
+                  Value={data?.username}
+                />
+                <FormHelperText error>{usernameError}</FormHelperText>
               </td>
             </tr>
             <tr>
               <td className="sm:py-5">Password:</td>
               <td>
-                <TextField onChange={handleChange} id="password" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.password} variant="outlined" />
+                <input
+                  className={`border px-3 ${passwordErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${passwordErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${passwordErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangePassword}
+                  id="password"
+                  Value={data?.password}
+                />
+                <FormHelperText error>{passwordError}</FormHelperText>
               </td>
             </tr>
             <tr>
               <td className="sm:py-5">Firstname:</td>
               <td>
-                <TextField onChange={handleChange} id="fname" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.fname} variant="outlined" />
+                <input
+                  className={`border px-3 ${firstnameErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${firstnameErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${firstnameErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangeFirstname}
+                  id="fname"
+                  Value={data?.fname}
+                />
+                <FormHelperText error>{firstnameError}</FormHelperText>
               </td>
             </tr>
             <tr>
               <td className="sm:py-5">Lastname:</td>
               <td >
-                <TextField onChange={handleChange} id="lname" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.lname} variant="outlined" />
+                <input
+                  className={`border px-3 ${lastnameErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${lastnameErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${lastnameErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangeLastname}
+                  id="lname"
+                  Value={data?.lname}
+                />
+                <FormHelperText error>{lastnameError}</FormHelperText>
               </td>
             </tr>
             <tr>
               <td className="sm:py-5">Phone number:</td>
               <td >
-                <TextField onChange={handleChange} id="phone" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.phone} variant="outlined" />
+                <input
+                  className={`border px-3 ${phoneErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${phoneErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${phoneErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangePhone}
+                  id="phone"
+                  Value={data?.phone}
+                  maxLength={10}
+                />
+                <FormHelperText error>{phoneError}</FormHelperText>
               </td>
             </tr>
             <tr>
               <td className="sm:py-5">Email:</td>
               <td>
-                <TextField onChange={handleChange} id="email" className="w-full bg-slate-100 bg-opacity-40" placeholder={data.email} variant="outlined" />
+                <input
+                  className={`border px-3 ${emailErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${emailErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${emailErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
+                  onChange={handleChangeEmail}
+                  id="email"
+                  Value={data?.email}
+                />
+                <FormHelperText error>{emailError}</FormHelperText>
               </td>
             </tr>
 
             <tr>
               <td className="sm:py-5">Position:</td>
               <td>
+              <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">{data.position}</InputLabel>
                 <Select
+                 labelId="demo-simple-select-label"
                   name="position"
                   className="w-full bg-slate-100 bg-opacity-40"
                   value={selectChange}
                   onChange={handleChangeselect}
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Without label' }}
+                  label={data.position}
                 >
-                  <MenuItem value="">
-                    <em>{data.seat}</em>
-                  </MenuItem>
                   <MenuItem value={'Manager'}>Manager</MenuItem>
                   <MenuItem value={'Sale'}>Sale</MenuItem>
                 </Select>
+                </FormControl>
+
               </td>
             </tr>
+
           </table>
           <div className="float-right my-5">
             <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>

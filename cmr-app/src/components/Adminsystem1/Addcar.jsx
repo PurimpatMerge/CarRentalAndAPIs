@@ -1,21 +1,129 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-// import Autocomplete from '@mui/material/Autocomplete';
+import FormHelperText from "@mui/material/FormHelperText";
 import { Image } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import Select from "@mui/material/Select";
 import axios from "axios";
 
 const Addcar = () => {
-    
+
     const [imageURLs, setImageURLs] = useState([]);
     const [info, setInfo] = useState({});
     const [images, setImages] = useState("");
-    
+    //***********************************************************Function For Validation******************************************************
+    //validation model
+    const [model, setModel] = useState('data');
+    const [modelError, setModelError] = useState('');
+    const [modelErrorInput, setModelErrorInput] = useState(false);
+    //validation year
+    const [year, setYear] = useState('2000');
+    const [yearError, setYearError] = useState('');
+    const [yearErrorInput, setYearErrorInput] = useState(false);
+    //validation lplate
+    const [lplate, setLplate] = useState('data');
+    const [lplateError, setLplateError] = useState('');
+    const [lplateErrorInput, setLplateErrorInput] = useState(false);
+    //validation engine
+    const [engine, setEngine] = useState('1000cc');
+    const [engineError, setEngineError] = useState('');
+    const [engineErrorInput, setEngineErrorInput] = useState(false);
+    //validation price
+    const [price, setPrice] = useState('1,000');
+    const [priceError, setPriceError] = useState('');
+    const [priceErrorInput, setPriceErrorInput] = useState(false);
+
+    //validation model
+    const validateModel = useCallback(() => {
+        const regex = /^[a-zA-Z0-9]+$/;
+        if (!model) {
+            setModelError('Please enter a model');
+            setModelErrorInput(true);
+        } else if (!regex.test(model)) {
+            setModelError('Model can only contain letters a-z and Number 0-9');
+            setModelErrorInput(true);
+        } else {
+            setModelError('');
+            setModelErrorInput(false);
+        }
+    }, [model]);
+
+    // validation year
+    const validateYear = useCallback(() => {
+        const regex = /^(19|20)\d{2}$/; // matches years from 1900 to 2099
+        if (!year) {
+            setYearError('Please enter a year');
+            setYearErrorInput(true);
+        } else if (!regex.test(year)) {
+            setYearError('Year should be a valid 4-digit number between 1900 and 2099');
+            setYearErrorInput(true);
+        } else {
+            setYearError('');
+            setYearErrorInput(false);
+        }
+    }, [year]);
+
+    // validation lplate
+    const validateLplate = useCallback(() => {
+        const regex = /^[0-9a-zA-Zก-ฮเแไใโะึืุูิีฺำฯะั่้็๋์ุูไฟฤๆฏฎษศซฅฉฐญฑฆฒธฦฎฅฤ๊ฮฬฦฺฯๅ฿ฌฎฐธๆ๏๛า]+$/u;
+        if (!lplate) {
+            setLplateError('Please enter a license Plate');
+            setLplateErrorInput(true);
+        } else if (!regex.test(lplate)) {
+            setLplateError('license can only contain letters a-z or ก-ฮ (Thai characters) and 0-9 (number)');
+            setLplateErrorInput(true);
+        } else {
+            setLplateError('');
+            setLplateErrorInput(false);
+        }
+    }, [lplate]);
+
+    // validation Engine
+    const validateEngine = useCallback(() => {
+        const regex = /^\d{1,4}cc$/;
+        if (!engine) {
+            setEngineError('Please enter an engine size');
+            setEngineErrorInput(true);
+        } else if (!regex.test(engine)) {
+            setEngineError('Engine size should be a valid number followed by "cc"');
+            setEngineErrorInput(true);
+        } else {
+            setEngineError('');
+            setEngineErrorInput(false);
+        }
+    }, [engine]);
+
+    // validation price
+    const validatePrice = useCallback(() => {
+        const regex = /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/;
+        if (!price) {
+            setPriceError('Please enter a price');
+            setPriceErrorInput(true);
+        } else if (!regex.test(price)) {
+            setPriceError('Price should be a valid number in Thai Baht format (e.g. 10,000.00)');
+            setPriceErrorInput(true);
+        } else {
+            setPriceError('');
+            setPriceErrorInput(false);
+        }
+    }, [price]);
+
+    //useEffect Validation
+    useEffect(() => {
+        validateModel();
+        validateYear();
+        validateLplate();
+        validateEngine();
+        validatePrice();
+
+    }, [validateModel, validateYear, validateLplate, validateEngine, validatePrice]);
+
+    //***********************************************************End Function For Validation******************************************************
+
     useEffect(() => {
         if (images?.length < 1) return;
         const newImageUrls = [];
@@ -24,15 +132,37 @@ const Addcar = () => {
     }, [images]);
 
     //img
-    
+
     const onImageChange = (e) => {
         setImages([...e.target.files]);
     };
 
-
-    const handleChange = (e) => {
+    //setInfo
+    const handleChangeModel = (e) => {
         setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setModel(e.target.value);
     };
+    const handleChangeYear = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setYear(e.target.value);
+    };
+    const handleChangeLplate = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setLplate(e.target.value);
+    };
+    const handleChangeEngine = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setEngine(e.target.value);
+    };
+    const handleChangePrice = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setPrice(e.target.value);
+    };
+
+
+    // const handleChange = (e) => {
+    //     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    // };
 
 
     const [selectChange1, setSelectchange1] = useState([]);
@@ -44,60 +174,60 @@ const Addcar = () => {
     const handleChangeselect1 = (event) => {
         setSelectchange1(event.target.value);
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        
+
     };
     const handleChangeselect2 = (event) => {
         setSelectchange2(event.target.value);
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        
+
     };
     const handleChangeselect3 = (event) => {
         setSelectchange3(event.target.value);
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        
+
     };
     const handleChangeselect4 = (event) => {
         setSelectchange4(event.target.value);
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        
+
     };
     const handleChangeselect5 = (event) => {
         setSelectchange5(event.target.value);
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-        
+
     };
 
     const handleClick = async (e) => {
         // const listPhoto = [];
-        
+
         try {
-            
+
             const list = await Promise.all(
                 Object.values(images).map(async (file) => {
-                  const data = new FormData();
-                  data.append("file", file);
-                  data.append("upload_preset", "cz1o5kxe");
-                  
-                  const uploadRes = await axios.post("https://api.cloudinary.com/v1_1/dmtdxulw2/image/upload",data);
-                  const { url } = uploadRes.data;
+                    const data = new FormData();
+                    data.append("file", file);
+                    data.append("upload_preset", "cz1o5kxe");
+
+                    const uploadRes = await axios.post("https://api.cloudinary.com/v1_1/dmtdxulw2/image/upload", data);
+                    const { url } = uploadRes.data;
                     return url;
-                //   listPhoto.push(uploadRes.data.url)
+                    //   listPhoto.push(uploadRes.data.url)
                 })
-              );
-              
+            );
+
             const addcar = {
                 ...info,
                 photos: list
             }
             console.log(addcar);
             const res = await axios.post("http://localhost:8800/api/car/addcar", addcar);
-            if(res){
+            if (res) {
                 // ให้ทำการ alert message
             }
         } catch (err) {
             console.log(err);
         }
-        
+
     };
 
     return (
@@ -111,7 +241,7 @@ const Addcar = () => {
                                 <td className="sm:py-4"> Car Image: </td>
                                 <td>
                                     <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <input hidden accept="image/*"  type="file" multiple onChange={onImageChange} />
+                                        <input hidden accept="image/*" type="file" multiple onChange={onImageChange} />
                                         <PhotoCamera />
                                     </IconButton>
                                     <label className="font-bold text-blue-600">Upload Car Image</label>
@@ -121,14 +251,15 @@ const Addcar = () => {
                                 <td></td>
                                 <td>
                                     {imageURLs?.map((imageSrc) => (
-                                        <Image width={150} src={imageSrc? imageSrc: ''} alt="profileimg" />
+                                        <Image width={150} src={imageSrc ? imageSrc : ''} alt="profileimg" />
                                     ))}
                                 </td>
                             </tr>
                             <tr >
                                 <td className="sm:py-5 ">ชื่อรุ่น:</td>
                                 <td>
-                                    <TextField onChange={handleChange} id="model" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
+                                    <TextField error={modelErrorInput} onChange={handleChangeModel} id="model" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
+                                    <FormHelperText error>{modelError}</FormHelperText>
                                 </td>
                             </tr>
                             <tr>
@@ -159,13 +290,17 @@ const Addcar = () => {
                             <tr >
                                 <td className="sm:py-5 ">ปี:</td>
                                 <td>
-                                    <TextField onChange={handleChange} id="year" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
+                                    <TextField error={yearErrorInput} onChange={handleChangeYear} id="year" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
+                                    <FormHelperText error>{yearError}</FormHelperText>
+
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ป้ายทะเบียน:</td>
                                 <td>
-                                    <TextField onChange={handleChange} id="lplate" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
+                                    <TextField error={lplateErrorInput} onChange={handleChangeLplate} id="lplate" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
+                                    <FormHelperText error>{lplateError}</FormHelperText>
+
                                 </td>
                             </tr>
                             <tr>
@@ -191,7 +326,7 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ประตู:</td>
                                 <td >
-                                    
+
                                     <Select
                                         name="door"
                                         className="w-full bg-slate-100 bg-opacity-40"
@@ -213,13 +348,15 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ขนาดเครื่องยนต์:</td>
                                 <td >
-                                    <TextField onChange={handleChange} id="engine" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
+                                    <TextField error={engineErrorInput} onChange={handleChangeEngine} id="engine" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
+                                    <FormHelperText error>{engineError}</FormHelperText>
+
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ประเภทเกียร์:</td>
                                 <td>
-                                <Select
+                                    <Select
                                         name="gear"
                                         className="w-full bg-slate-100 bg-opacity-40"
                                         value={selectChange4}
@@ -232,14 +369,14 @@ const Addcar = () => {
                                         </MenuItem>
                                         <MenuItem value={'Auto'}>Auto</MenuItem>
                                         <MenuItem value={'Manual'}>Manual</MenuItem>
-                                        
+
                                     </Select>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ประเภท:</td>
                                 <td>
-                                <Select
+                                    <Select
                                         name="type"
                                         className="w-full bg-slate-100 bg-opacity-40"
                                         value={selectChange5}
@@ -255,15 +392,17 @@ const Addcar = () => {
                                         <MenuItem value={'C-Segment'}>C-Segment</MenuItem>
                                         <MenuItem value={'D-Segment'}>D-Segment</MenuItem>
                                         <MenuItem value={'SUV'}>SUV</MenuItem>
-                                        
+
                                     </Select>
-           
+
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ราคาต่อวัน:</td>
                                 <td>
-                                    <TextField onChange={handleChange} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
+                                    <TextField error={priceErrorInput} onChange={handleChangePrice} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
+                                    <FormHelperText error>{priceError}</FormHelperText>
+
                                 </td>
                             </tr>
                         </table>
