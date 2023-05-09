@@ -59,7 +59,7 @@ export const getAllRentConfirm = async (req, res, next) => {
 
 export const getAllHistory = async (req, res, next) => {
   try {
-    const allRent = await Rent.find({ activestatus: "History" });
+    const allRent = await Rent.find({ activestatus: { $in: ["History", "Rejected"] } });
     const carIds = allRent.map((rent) => rent.carid);
     const cars = await Car.find({ _id: { $in: carIds } }).lean(); // add .lean() to get plain JavaScript objects instead of Mongoose documents
     const rentAndCarIds = allRent.map((rent) => ({
@@ -121,7 +121,22 @@ export const distributionAndUpdateStatus = async (req, res, next) => {
     );
 
     res.status(200).json(updatedStatusAndResponse);
-    // res.status(200).send("Bluetooth mode is connected Successfully");
+   
+  } catch (err) {
+    next(err);
+  }
+};
+export const distributionAndUpdateStatusRejected = async (req, res, next) => {
+  try {
+    const fname = req.params.fname;
+    const id = req.params.id; // get the ID from the URL parameter
+    const updatedStatusAndResponse = await Rent.findByIdAndUpdate(
+      id,
+      { activestatus: "Rejected", responsibilities: fname },
+      { new: true }
+    );
+    res.status(200).json(updatedStatusAndResponse);
+    
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import React from 'react';
+import React, { useEffect, useState }from 'react';
 import { Divider } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -17,14 +17,43 @@ const Historydetail = () => {
     const location = useLocation();
     const { model, brand, year, lplate } = location.state;
     //   useEffect(() => {}, [data]);
+    
+    const [user, setUser] = useState('null');
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            setUser(JSON.parse(storedUser));
+          }
+        }, 500);
+    
+        // Clean up the timer when the component is unmounted
+        return () => clearTimeout(timerId);
+    
+      }, []);
+
+      
 
     const handleClick = async () => {
         // const listPhoto = [];
         try {
-            console.log('bitttt');
             const res = await axios.put(`http://localhost:8800/api/rent/distributionAndUpdateStatus/${id}`);
             if (res) {
-                console.log(res, "add User Succesful!");
+                console.log(res, "Confirmed");
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+    };
+    
+    const handleClickReject = async () => {
+        // const listPhoto = [];
+        try {
+            const res = await axios.put(`http://localhost:8800/api/rent/distributionAndUpdateStatusRejected/${id}/${user.fname}`);
+            if (res) {
+                console.log(res, "Rejected");
             }
         } catch (err) {
             console.log(err);
@@ -86,18 +115,15 @@ const Historydetail = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div className="justify-between sm:flex">
                     <div className='  mb-10 sm:mb-0 sm:mr-10 sm:w-1/2'>
                         <div className='mx-5 my-5'>
                             <h1 className='font-bold text-xl tracking-wide '>ข้อมูลการโอนเงิน</h1>
                             <Divider />
-                            <img className='mt-5' src={slip} alt='slip' />
+                            <img className='mt-5 h-96' src={slip} alt='slip' />
                         </div>
-
                     </div>
                     <div className='sm:w-1/2'>
                         <div className='mx-5 my-5'>
@@ -107,9 +133,13 @@ const Historydetail = () => {
                             <p className='mt-1'>ราคาทั้งหมด ราคา บาท</p>
                         </div>
                     </div>
-
                 </div>
-                <Button onClick={handleClick} variant="contained" className='float-right bottom-5'>Confirm</Button>
+                <div className='float-right mb-5'>
+                    <Button onClick={handleClick} variant="contained" className='mx-5' >Confirm</Button>
+                    <Button onClick={handleClickReject} color="error" variant="outlined" >Reject</Button>
+                </div>
+
+
 
             </div>
         </div>

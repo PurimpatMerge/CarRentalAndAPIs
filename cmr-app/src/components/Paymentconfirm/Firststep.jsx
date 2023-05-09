@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { Divider } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -6,27 +6,140 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import lineicon from '../../img/line.png'
-import { useLocation,useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import useFetch from "../../hooks/useFetch";
 import { useTranslation } from 'react-i18next';
-import { useState} from "react";
+import { useState, useEffect, useCallback } from "react";
+import FormHelperText from "@mui/material/FormHelperText";
 const Firststep = () => {
 
     const { id } = useParams();
     const { data } = useFetch(
         `http://localhost:8800/api/car/getCarById/${id}`
     );
-    console.log(data);
+    // console.log(data);
     const location = useLocation();
     const { dataSearch } = location.state;
-    console.log('datasearch=',dataSearch);
+    // console.log('datasearch=',dataSearch);
     const { t } = useTranslation();
+
+    //validation firstname
+    const [firstname, setFirstname] = useState('mockdata');
+    const [firstnameError, setFirstnameError] = useState('');
+    const [firstnameErrorInput, setFirstnameErrorInput] = useState(false);
+    //validation lastname
+    const [lastname, setLastname] = useState('mockdata');
+    const [lastnameError, setLastnameError] = useState('');
+    const [lastnameErrorInput, setLastnameErrorInput] = useState(false);
+    //validation Phone
+    const [phone, setPhone] = useState('1234567890');
+    const [phoneError, setPhoneError] = useState('');
+    const [phoneErrorInput, setPhoneErrorInput] = useState(false);
+    //validation Email
+    const [email, setEmail] = useState('a@b.c');
+    const [emailError, setEmailError] = useState('');
+    const [emailErrorInput, setEmailErrorInput] = useState(false);
+
+    //validation firstname
+    const validateFirstname = useCallback(() => {
+        const regex = /^[a-zA-Zก-ฮเแไใโะึืุูิีฺำฯะั่้็๋์ุูไฟฤๆฏฎษศซฅฉฐญฑฆฒธฦฎฅฤ๊ฮฬฦฺฯๅ฿ฌฎฐธๆ๏๛า]+$/u;
+        if (!firstname) {
+            setFirstnameError('Please enter a name');
+            setFirstnameErrorInput(true);
+        } else if (!regex.test(firstname)) {
+            setFirstnameError('Name can only contain letters a-z or ก-ฮ (Thai characters)');
+            setFirstnameErrorInput(true);
+        } else {
+            setFirstnameError('');
+            setFirstnameErrorInput(false);
+        }
+    }, [firstname]);
+
+    //validation lastname
+    const validateLastname = useCallback(() => {
+        const regex = /^[a-zA-Zก-ฮเแไใโะึืุูิีฺำฯะั่้็๋์ุูไฟฤๆฏฎษศซฅฉฐญฑฆฒธฦฎฅฤ๊ฮฬฦฺฯๅ฿ฌฎฐธๆ๏๛า]+$/u;
+        if (!lastname) {
+            setLastnameError('Please enter a Lastname');
+            setLastnameErrorInput(true);
+        } else if (!regex.test(lastname)) {
+            setLastnameError('Lastname can only contain letters a-z or ก-ฮ (Thai characters)');
+            setLastnameErrorInput(true);
+        } else {
+            setLastnameError('');
+            setLastnameErrorInput(false);
+        }
+    }, [lastname]);
+
+    //validation Phone
+    const validatePhone = useCallback(() => {
+
+        if (!phone) {
+            setPhoneError('Please enter a Phone number');
+            setPhoneErrorInput(true);
+        } else if (!/^\d+$/.test(phone)) {
+            setPhoneError('Phone can only contain 0-9 (Number)');
+            setPhoneErrorInput(true);
+        } else if (phone.length !== 10) {
+            setPhoneError('Phone must be exactly 10 digits long');
+            setPhoneErrorInput(true);
+        } else {
+            setPhoneError('');
+            setPhoneErrorInput(false);
+        }
+    }, [phone]);
+
+      //validation email
+  const validateEmail = useCallback(() => {
+    const regex = /^[a-z]+@[a-z]+\.[a-z]+$/i; // Fixed regex pattern
+
+    if (!email) {
+      setEmailError('Please enter an email address');
+      setEmailErrorInput(true);
+    } else if (!regex.test(email)) {
+      setEmailError('Please enter a valid data.email address');
+      setEmailErrorInput(true);
+    } else {
+      setEmailError('');
+      setEmailErrorInput(false);
+    }
+
+  }, [email]);
 
     //getdatapersonal
     const [info, setInfo] = useState({});
-    const handleChange = (e) => {
+
+    // const handleChange = (e) => {
+    //     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    // };
+
+    //setInfo Firstname
+    const handleChangeFirstname = (e) => {
         setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setFirstname(e.target.value);
     };
+    //setInfo Lastname
+    const handleChangeLastname = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setLastname(e.target.value);
+    };
+    //setInfo Phone
+    const handleChangePhone = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setPhone(e.target.value);
+    };
+    //setInfo Email
+    const handleChangeEmail = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        setEmail(e.target.value);
+    };
+
+     //useEffect Validation
+  useEffect(() => {
+    validateFirstname();
+    validateLastname();
+    validatePhone();
+    validateEmail();
+  }, [ validateFirstname, validateLastname, validatePhone, validateEmail ]);
 
     // const personalInfo = info.push(...dataSearch)
     const personalInfo = {
@@ -46,18 +159,22 @@ const Firststep = () => {
                     <table className='my-5 mx-5'>
                         <tr >
                             <td className='py-5 pr-5 '>
-                                <TextField onChange={handleChange} id="cfname" label="Firstname" variant="standard" />
+                                <TextField error={firstnameErrorInput} onChange={handleChangeFirstname} id="cfname" label="Firstname" variant="standard" />
+                                <FormHelperText error>{firstnameError}</FormHelperText>
                             </td>
                             <td>
-                                <TextField onChange={handleChange} id="clname" label="Lastname" variant="standard" />
+                                <TextField error={lastnameErrorInput} onChange={handleChangeLastname} id="clname" label="Lastname" variant="standard" />
+                                <FormHelperText error>{lastnameError}</FormHelperText>
                             </td>
                         </tr>
                         <tr>
                             <td className='py-5 pr-5'>
-                                <TextField onChange={handleChange} id="cemail" label="Email" variant="standard" />
+                                <TextField error={emailErrorInput} onChange={handleChangeEmail} id="cemail" label="Email" variant="standard" />
+                                <FormHelperText error>{emailError}</FormHelperText>
                             </td>
                             <td>
-                                <TextField onChange={handleChange} id="cphone" label="Phone Number" variant="standard" />
+                                <TextField error={phoneErrorInput} onChange={handleChangePhone} id="cphone" label="Phone Number" variant="standard" inputProps={{ maxLength: 10 }} />
+                                <FormHelperText error>{phoneError}</FormHelperText>
                             </td>
                         </tr>
                     </table>
@@ -111,7 +228,7 @@ const Firststep = () => {
                         <h1 className='font-bold text-xl tracking-wide mb-5'>{t('pricedetail')}</h1>
                         <p>{t('rentperiod')} ต้องคำนวนวัน 3 {t('day')}</p>
                         <Divider />
-                       <p className='mt-1'>{t('totalprice')} ต้องคำนวนเวลา  {t('thb')}</p>
+                        <p className='mt-1'>{t('totalprice')} ต้องคำนวนเวลา  {t('thb')}</p>
                     </div>
                 </div>
             </div>

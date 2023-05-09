@@ -9,7 +9,8 @@ import { Image } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import Select from "@mui/material/Select";
 import axios from "axios";
-
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 const Addcar = () => {
 
     const [imageURLs, setImageURLs] = useState([]);
@@ -265,26 +266,26 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">แบรนด์:</td>
                                 <td>
-                                    <Select
-                                        name="brand"
-                                        className="w-full bg-slate-100 bg-opacity-40"
-                                        value={selectChange1}
-                                        onChange={handleChangeselect1}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'Totoya'}>Totoya</MenuItem>
-                                        <MenuItem value={'Honda'}>Honda</MenuItem>
-                                        <MenuItem value={'Nissan'}>Nissan</MenuItem>
-                                        <MenuItem value={'GWM'}>GWM</MenuItem>
-                                        <MenuItem value={'Mazda'}>Mazda</MenuItem>
-                                        <MenuItem value={'BMW'}>BMW</MenuItem>
-                                        <MenuItem value={'Benz'}>Benz</MenuItem>
-                                        <MenuItem value={'Tesla'}>Tesla</MenuItem>
-                                    </Select>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Brand</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            name="brand"
+                                            className="w-full bg-slate-100 bg-opacity-40"
+                                            value={selectChange1}
+                                            onChange={handleChangeselect1}
+                                            label="Brand"
+                                        >
+                                            <MenuItem value={'Totoya'}>Totoya</MenuItem>
+                                            <MenuItem value={'Honda'}>Honda</MenuItem>
+                                            <MenuItem value={'Nissan'}>Nissan</MenuItem>
+                                            <MenuItem value={'GWM'}>GWM</MenuItem>
+                                            <MenuItem value={'Mazda'}>Mazda</MenuItem>
+                                            <MenuItem value={'BMW'}>BMW</MenuItem>
+                                            <MenuItem value={'Benz'}>Benz</MenuItem>
+                                            <MenuItem value={'Tesla'}>Tesla</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </td>
                             </tr>
                             <tr >
@@ -306,43 +307,41 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">จำนวนที่นั่ง:</td>
                                 <td>
-                                    <Select
-                                        name="seat"
-                                        className="w-full bg-slate-100 bg-opacity-40"
-                                        value={selectChange2}
-                                        onChange={handleChangeselect2}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'2'}>2</MenuItem>
-                                        <MenuItem value={'4'}>4</MenuItem>
-                                        <MenuItem value={'5'}>5</MenuItem>
-                                    </Select>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Seat</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            name="seat"
+                                            className="w-full bg-slate-100 bg-opacity-40"
+                                            value={selectChange2}
+                                            onChange={handleChangeselect2}
+                                            label="Seat"
+                                        >
+                                            <MenuItem value={'2'}>2</MenuItem>
+                                            <MenuItem value={'4'}>4</MenuItem>
+                                            <MenuItem value={'5'}>5</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ประตู:</td>
                                 <td >
-
-                                    <Select
-                                        name="door"
-                                        className="w-full bg-slate-100 bg-opacity-40"
-                                        value={selectChange3}
-                                        onChange={handleChangeselect3}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'2'}>2</MenuItem>
-                                        <MenuItem value={'4'}>4</MenuItem>
-                                        <MenuItem value={'5'}>5</MenuItem>
-                                    </Select>
-
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Door</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            name="door"
+                                            className="w-full bg-slate-100 bg-opacity-40"
+                                            value={selectChange3}
+                                            onChange={handleChangeselect3}
+                                            label="Door"
+                                        >
+                                            <MenuItem value={'2'}>2</MenuItem>
+                                            <MenuItem value={'4'}>4</MenuItem>
+                                            <MenuItem value={'5'}>5</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </td>
                             </tr>
                             <tr>
@@ -356,45 +355,43 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ประเภทเกียร์:</td>
                                 <td>
-                                    <Select
-                                        name="gear"
-                                        className="w-full bg-slate-100 bg-opacity-40"
-                                        value={selectChange4}
-                                        onChange={handleChangeselect4}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'Auto'}>Auto</MenuItem>
-                                        <MenuItem value={'Manual'}>Manual</MenuItem>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Gear</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            name="gear"
+                                            className="w-full bg-slate-100 bg-opacity-40"
+                                            value={selectChange4}
+                                            onChange={handleChangeselect4}
+                                            label="Gear"
+                                        >
+                                            <MenuItem value={'Auto'}>Auto</MenuItem>
+                                            <MenuItem value={'Manual'}>Manual</MenuItem>
+                                        </Select>
+                                    </FormControl>
 
-                                    </Select>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="sm:py-5">ประเภท:</td>
                                 <td>
-                                    <Select
-                                        name="type"
-                                        className="w-full bg-slate-100 bg-opacity-40"
-                                        value={selectChange5}
-                                        onChange={handleChangeselect5}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'Eco'}>Eco</MenuItem>
-                                        <MenuItem value={'EV'}>EV</MenuItem>
-                                        <MenuItem value={'C-Segment'}>C-Segment</MenuItem>
-                                        <MenuItem value={'D-Segment'}>D-Segment</MenuItem>
-                                        <MenuItem value={'SUV'}>SUV</MenuItem>
-
-                                    </Select>
-
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            name="type"
+                                            className="w-full bg-slate-100 bg-opacity-40"
+                                            value={selectChange5}
+                                            onChange={handleChangeselect5}
+                                            label="Type"
+                                        >
+                                            <MenuItem value={'Eco'}>Eco</MenuItem>
+                                            <MenuItem value={'EV'}>EV</MenuItem>
+                                            <MenuItem value={'C-Segment'}>C-Segment</MenuItem>
+                                            <MenuItem value={'D-Segment'}>D-Segment</MenuItem>
+                                            <MenuItem value={'SUV'}>SUV</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </td>
                             </tr>
                             <tr>
@@ -402,7 +399,6 @@ const Addcar = () => {
                                 <td>
                                     <TextField error={priceErrorInput} onChange={handleChangePrice} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
                                     <FormHelperText error>{priceError}</FormHelperText>
-
                                 </td>
                             </tr>
                         </table>

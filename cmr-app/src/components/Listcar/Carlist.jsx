@@ -20,19 +20,21 @@ const Carlist = ({ selectedOptions }) => {
     const navigate = useNavigate();
 
     //getallcar
-    const { data} = useFetch(
-        selectedOptions && `http://localhost:8800/api/car/getCarByFilter/${
-          selectedOptions.types && selectedOptions.types.join(',')
-        }/${
-          selectedOptions.seats && selectedOptions.seats.join(',')
-        }/${
-          selectedOptions.brands && selectedOptions.brands.join(',')
-        }`
-      );
-    
+    // const { data} = useFetch(
+    //     selectedOptions && `http://localhost:8800/api/car/getCarByFilter/${
+    //       selectedOptions.types && selectedOptions.types.join(',')
+    //     }/${
+    //       selectedOptions.seats && selectedOptions.seats.join(',')
+    //     }/${
+    //       selectedOptions.brands && selectedOptions.brands.join(',')
+    //     }`
+    //   );
+    const { data } = useFetch('http://localhost:8800/api/car/allCar');
+
     useEffect(() => {
 
     }, [data]);
+    
     const location = useLocation();
     const { dataSearch } = location.state;
     const lang = location.pathname.split("/")[2];
@@ -40,7 +42,7 @@ const Carlist = ({ selectedOptions }) => {
 
     // console.log("this data geter",dataSearch);
 
-    console.log(selectedOptions);
+    // console.log(selectedOptions);
     console.log(data);
 
 
