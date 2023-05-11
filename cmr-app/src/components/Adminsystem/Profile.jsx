@@ -14,7 +14,12 @@ import axios from "axios";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useRef } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { blue } from '@mui/material/colors';
 const Profile = () => {
 
   //get params 
@@ -52,7 +57,18 @@ const Profile = () => {
   const [emailError, setEmailError] = useState('');
   const [emailErrorInput, setEmailErrorInput] = useState(false);
 
+  //validate button
+  const [submitbtn, setSubmitbtn] = useState(false);
 
+
+  useEffect(() => {
+    if (emailErrorInput === true || phoneErrorInput === true || firstnameErrorInput === true || usernameErrorInput === true || passwordErrorInput === true) {
+      setSubmitbtn(true);
+    } else {
+      setSubmitbtn(false);
+    }
+
+  }, [emailErrorInput, phoneErrorInput, firstnameErrorInput, usernameErrorInput, passwordErrorInput, submitbtn]);
 
   //validation username
   const validateUsername = useCallback(() => {
@@ -214,7 +230,7 @@ const Profile = () => {
     setImages([...e.target.files]);
   };
 
-  
+
 
   //menuitems
   const [selectChange, setSelectchange] = useState([]);
@@ -222,6 +238,36 @@ const Profile = () => {
     setSelectchange(event.target.value);
     setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
+
+
+
+  //Alert
+  const [alertmsg, setAleartMsg] = useState('');
+  const [alertcolor, setAleartColor] = useState('');
+  const [openalert, setOpenAlert] = useState(false);
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
+  //loading btn
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const timer = useRef();
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (success === true) {
+      window.location.reload(false);
+    }
+  }, [success]);
 
   //edit function
   const handleClick = async (e) => {
@@ -255,10 +301,22 @@ const Profile = () => {
       const res = await axios.put("http://localhost:8800/api/auth/edituserbyid", edituser);
 
       if (res) {
-        window.location.reload(false);
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+        setAleartMsg('Edit profile was successfully!');
+        setAleartColor('success');
+        setOpenAlert(true);
       }
     } catch (err) {
-      console.log(err);
+      setAleartMsg('There was an error while Editting the profile. Please try again later.');
+      setAleartColor('error');
+      setOpenAlert(true);
     }
 
   };
@@ -287,7 +345,7 @@ const Profile = () => {
 
 
 
-  console.log(data?.username);
+
   return (
 
     <motion.div
@@ -298,6 +356,11 @@ const Profile = () => {
         delay: 0.1,
         ease: [0, 0.71, 0.2, 1.01]
       }} className="box container mx-auto sm:max-w-screen-md ">
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openalert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity={alertcolor} sx={{ width: '100%' }}>
+          {alertmsg}
+        </Alert>
+      </Snackbar>
       <div className="flex flex-col ">
         <div className="bg-white shadow-lg bg-opacity-80 rounded-lg mx-4 my-4 px-10 sm:mx-10 sm:my-10">
           <table class="table-auto mt-5 text-xs w-full sm:text-base  ">
@@ -337,8 +400,6 @@ const Profile = () => {
             <tr >
               <td className="sm:py-5 ">Username:</td>
               <td>
-             
-              <TextField name="username"  onChange={handleChangeUsername} label="Outlined" defaultValue={data?.username || ''} variant="outlined" />
                 <input
                   className={`border px-3 ${usernameErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${usernameErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${usernameErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
                   onChange={handleChangeUsername}
@@ -413,19 +474,19 @@ const Profile = () => {
             <tr>
               <td className="sm:py-5">Position:</td>
               <td>
-              <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">{data.position}</InputLabel>
-                <Select
-                 labelId="demo-simple-select-label"
-                  name="position"
-                  className="w-full bg-slate-100 bg-opacity-40"
-                  value={selectChange}
-                  onChange={handleChangeselect}
-                  label={data.position}
-                >
-                  <MenuItem value={'Manager'}>Manager</MenuItem>
-                  <MenuItem value={'Sale'}>Sale</MenuItem>
-                </Select>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">{data.position}</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    name="position"
+                    className="w-full bg-slate-100 bg-opacity-40"
+                    value={selectChange}
+                    onChange={handleChangeselect}
+                    label={data.position}
+                  >
+                    <MenuItem value={'Manager'}>Manager</MenuItem>
+                    <MenuItem value={'Sale'}>Sale</MenuItem>
+                  </Select>
                 </FormControl>
 
               </td>
@@ -433,7 +494,23 @@ const Profile = () => {
 
           </table>
           <div className="float-right my-5">
-            <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
+            <Box sx={{ m: 1, position: 'relative' }}>
+              <Button onClick={handleClick} disabled={submitbtn || loading} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    color: blue[500],
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                  }}
+                />
+              )}
+            </Box>
+
           </div>
         </div>
       </div>

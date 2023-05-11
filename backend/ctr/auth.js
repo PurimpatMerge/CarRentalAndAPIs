@@ -103,21 +103,41 @@ export const getUserById = async (req, res, next) => {
   try {
     const allUserbyid = await User.findById(req.params.id);
      res.status(200).json(allUserbyid);
-    // console.log('testgetuserbyid api');
+    
   } catch (err) {
     next(err);
   }
 };
+// export const getUserById = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.id);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+    
+//     const isMatch = bcrypt.compareSync(req.body.password, user.password);
+//     if (isMatch) {
+//       console.log(`User's real password is: ${req.body.password}`);
+//     } else {
+//       console.log(`Provided password doesn't match the user's password`);
+//     }
+    
+//     res.status(200).json(user);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const editUserById = async (req, res, next) => {
   try {
+   
     const newData = new User({  
       ...req.body,
     });
-    const updatedata = await User.findByIdAndUpdate(req.body._id, { $set: newData }, { new: true });
-    console.log(updatedata);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newData.password, salt);
+    const updatedata = await User.findByIdAndUpdate(req.body._id, { $set: newData ,password: hash }, { new: true });
     if (!updatedata) {
-      
       return res.status(404).json({ error: 'User not found' });
     }
     return res.status(200).json(updatedata);

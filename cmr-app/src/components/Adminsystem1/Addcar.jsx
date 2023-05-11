@@ -11,6 +11,12 @@ import Select from "@mui/material/Select";
 import axios from "axios";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useRef } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { blue } from '@mui/material/colors';
 const Addcar = () => {
 
     const [imageURLs, setImageURLs] = useState([]);
@@ -37,7 +43,16 @@ const Addcar = () => {
     const [price, setPrice] = useState('1,000');
     const [priceError, setPriceError] = useState('');
     const [priceErrorInput, setPriceErrorInput] = useState(false);
-
+    //validate button
+    const [submitbtn, setSubmitbtn] = useState(false);
+    useEffect(() => {
+        if (modelErrorInput === true || yearErrorInput === true || lplateErrorInput === true || engineErrorInput === true || priceErrorInput === true) {
+          setSubmitbtn(true);
+        } else {
+          setSubmitbtn(false);
+        }
+    
+      }, [modelErrorInput, yearErrorInput, lplateErrorInput, engineErrorInput, priceErrorInput, submitbtn]);
     //validation model
     const validateModel = useCallback(() => {
         const regex = /^[a-zA-Z0-9]+$/;
@@ -198,6 +213,34 @@ const Addcar = () => {
 
     };
 
+    //Alert
+    const [alertmsg, setAleartMsg] = useState('');
+    const [alertcolor, setAleartColor] = useState('');
+    const [openalert, setOpenAlert] = useState(false);
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenAlert(false);
+    };
+    //loading btn
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const timer = useRef();
+
+    useEffect(() => {
+        return () => {
+            clearTimeout(timer.current);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (success === true) {
+            window.location.reload(false);
+        }
+    }, [success]);
+
     const handleClick = async (e) => {
         // const listPhoto = [];
 
@@ -208,7 +251,6 @@ const Addcar = () => {
                     const data = new FormData();
                     data.append("file", file);
                     data.append("upload_preset", "cz1o5kxe");
-
                     const uploadRes = await axios.post("https://api.cloudinary.com/v1_1/dmtdxulw2/image/upload", data);
                     const { url } = uploadRes.data;
                     return url;
@@ -223,20 +265,37 @@ const Addcar = () => {
             console.log(addcar);
             const res = await axios.post("http://localhost:8800/api/car/addcar", addcar);
             if (res) {
-                // ให้ทำการ alert message
+                if (!loading) {
+                    setSuccess(false);
+                    setLoading(true);
+                    timer.current = window.setTimeout(() => {
+                        setSuccess(true);
+                        setLoading(false);
+                    }, 2000);
+                }
+                setAleartMsg('The car was added successfully!');
+                setAleartColor('success');
+                setOpenAlert(true);
+
             }
         } catch (err) {
-            console.log(err);
+            setAleartMsg('There was an error while adding the car. Please try again later.');
+            setAleartColor('error');
+            setOpenAlert(true);
         }
 
     };
 
     return (
         <>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openalert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity={alertcolor} sx={{ width: '100%' }}>
+                    {alertmsg}
+                </Alert>
+            </Snackbar>
             <div className="container mx-auto sm:max-w-screen-md ">
                 <div className="flex flex-col ">
                     <div className="bg-white bg-opacity-80 rounded-lg mx-4 my-4 px-10 sm:mx-10 sm:my-10">
-
                         <table class="table-auto mt-5 text-xs w-full sm:text-base  ">
                             <tr >
                                 <td className="sm:py-4"> Car Image: </td>
@@ -259,7 +318,7 @@ const Addcar = () => {
                             <tr >
                                 <td className="sm:py-5 ">ชื่อรุ่น:</td>
                                 <td>
-                                    <TextField error={modelErrorInput} onChange={handleChangeModel} id="model" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
+                                    <TextField required error={modelErrorInput} onChange={handleChangeModel} id="model" className="w-full bg-slate-100 bg-opacity-40" label="Model" variant="outlined" />
                                     <FormHelperText error>{modelError}</FormHelperText>
                                 </td>
                             </tr>
@@ -291,7 +350,7 @@ const Addcar = () => {
                             <tr >
                                 <td className="sm:py-5 ">ปี:</td>
                                 <td>
-                                    <TextField error={yearErrorInput} onChange={handleChangeYear} id="year" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
+                                    <TextField required error={yearErrorInput} onChange={handleChangeYear} inputProps={{ maxLength: 4 }} id="year" className="w-full bg-slate-100 bg-opacity-40" label="ํYear" variant="outlined" />
                                     <FormHelperText error>{yearError}</FormHelperText>
 
                                 </td>
@@ -299,7 +358,7 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ป้ายทะเบียน:</td>
                                 <td>
-                                    <TextField error={lplateErrorInput} onChange={handleChangeLplate} id="lplate" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
+                                    <TextField required error={lplateErrorInput} onChange={handleChangeLplate} id="lplate" className="w-full bg-slate-100 bg-opacity-40" label="License Plate" variant="outlined" />
                                     <FormHelperText error>{lplateError}</FormHelperText>
 
                                 </td>
@@ -347,9 +406,8 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ขนาดเครื่องยนต์:</td>
                                 <td >
-                                    <TextField error={engineErrorInput} onChange={handleChangeEngine} id="engine" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
+                                    <TextField required error={engineErrorInput} onChange={handleChangeEngine} id="engine" className="w-full bg-slate-100 bg-opacity-40" label="Engine" variant="outlined" />
                                     <FormHelperText error>{engineError}</FormHelperText>
-
                                 </td>
                             </tr>
                             <tr>
@@ -397,19 +455,35 @@ const Addcar = () => {
                             <tr>
                                 <td className="sm:py-5">ราคาต่อวัน:</td>
                                 <td>
-                                    <TextField error={priceErrorInput} onChange={handleChangePrice} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
+                                    <TextField required error={priceErrorInput} onChange={handleChangePrice} id="price" className="w-full bg-slate-100 bg-opacity-40" label="Price per day" variant="outlined" />
                                     <FormHelperText error>{priceError}</FormHelperText>
                                 </td>
                             </tr>
                         </table>
                         <div className="float-right my-5">
-                            <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
+                            <Box sx={{ m: 1, position: 'relative' }}>
+                                <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " disabled={submitbtn || loading  } variant="contained">Apply</Button>
+                                {loading && (
+                                    <CircularProgress
+                                        size={24}
+                                        sx={{
+                                            color: blue[500],
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            marginTop: '-12px',
+                                            marginLeft: '-12px',
+                                        }}
+                                    />
+                                )}
+                            </Box>
                         </div>
 
                     </div>
                 </div>
             </div>
         </>
+
     );
 };
 

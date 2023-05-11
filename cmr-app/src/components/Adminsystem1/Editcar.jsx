@@ -13,6 +13,12 @@ import Delete from '@mui/icons-material/Delete';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from '@mui/material/InputLabel';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useRef } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { blue } from '@mui/material/colors';
 const Editcar = () => {
     // get id
     const { id } = useParams();
@@ -132,6 +138,17 @@ const Editcar = () => {
 
     }, [validateModel, validateYear, validateLplate, validateEngine, validatePrice]);
 
+    //validate button
+    const [submitbtn, setSubmitbtn] = useState(false);
+    useEffect(() => {
+        if (modelErrorInput === true || yearErrorInput === true || lplateErrorInput === true || engineErrorInput === true || priceErrorInput === true) {
+          setSubmitbtn(true);
+        } else {
+          setSubmitbtn(false);
+        }
+    
+      }, [modelErrorInput, yearErrorInput, lplateErrorInput, engineErrorInput, priceErrorInput, submitbtn]);
+
     //***********************************************************End Function For Validation******************************************************
 
     //setInfo
@@ -202,6 +219,34 @@ const Editcar = () => {
         setInfo((prev) => ({ ...prev, [event.target.name]: event.target.value }));
     };
 
+    //Alert
+    const [alertmsg, setAleartMsg] = useState('');
+    const [alertcolor, setAleartColor] = useState('');
+    const [openalert, setOpenAlert] = useState(false);
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenAlert(false);
+    };
+    //loading btn
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const timer = useRef();
+
+    useEffect(() => {
+        return () => {
+            clearTimeout(timer.current);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (success === true) {
+            window.location.reload(false);
+        }
+    }, [success]);
+
     const handleClick = async (e) => {
         // const listPhoto = [];
 
@@ -231,12 +276,23 @@ const Editcar = () => {
             // console.log(list);
             console.log(editcar);
             const res = await axios.put("http://localhost:8800/api/car/editCarById", editcar);
-            window.location.reload(false);
             if (res) {
-                // ให้ทำการ alert message
+                if (!loading) {
+                    setSuccess(false);
+                    setLoading(true);
+                    timer.current = window.setTimeout(() => {
+                        setSuccess(true);
+                        setLoading(false);
+                    }, 2000);
+                }
+                setAleartMsg('The car was added successfully!');
+                setAleartColor('success');
+                setOpenAlert(true);
             }
         } catch (err) {
-            console.log(err);
+            setAleartMsg('There was an error while adding the car. Please try again later.');
+            setAleartColor('error');
+            setOpenAlert(true);
         }
 
     };
@@ -267,6 +323,11 @@ const Editcar = () => {
 
     return (
         <>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openalert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity={alertcolor} sx={{ width: '100%' }}>
+                    {alertmsg}
+                </Alert>
+            </Snackbar>
             <div className="container mx-auto sm:max-w-screen-md ">
                 <div className="flex flex-col ">
                     <div className="bg-white bg-opacity-80 rounded-lg mx-4 my-4 px-10 sm:mx-10 sm:my-10">
@@ -480,7 +541,22 @@ const Editcar = () => {
                             </tr>
                         </table>
                         <div className="float-right my-5">
-                            <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " variant="contained">Apply</Button>
+                            <Box sx={{ m: 1, position: 'relative' }}>
+                                <Button onClick={handleClick} className="sm:py-2 text-xs py-1 px-1 sm:px-4 " disabled={submitbtn || loading  } variant="contained">Apply</Button>
+                                {loading && (
+                                    <CircularProgress
+                                        size={24}
+                                        sx={{
+                                            color: blue[500],
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            marginTop: '-12px',
+                                            marginLeft: '-12px',
+                                        }}
+                                    />
+                                )}
+                            </Box>
                         </div>
                     </div>
                 </div>

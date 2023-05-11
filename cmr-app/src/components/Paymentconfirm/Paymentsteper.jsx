@@ -238,7 +238,7 @@ const Paymentsteper = () => {
             setNext1btn(false);
         }
 
-    }, [firstnameErrorInput, lastnameErrorInput, phoneErrorInput, emailErrorInput, next1btn]);
+    }, [firstnameErrorInput, lastnameErrorInput, phoneErrorInput, emailErrorInput, next1btn, starter1, starter2, starter3, starter4]);
 
 
     //second********************************************************************************************************
@@ -259,11 +259,12 @@ const Paymentsteper = () => {
 
     //Third ********************************************************************************************************** 
     const [imageURLs, setImageURLs] = useState([]);
-
+    const [stepbtnThird, setstepbtnThird] = useState(false);
     //img
     const [images, setImages] = useState("");
     const onImageChange = (e) => {
         setImages([...e.target.files]);
+        setstepbtnThird(true);
     };
 
 
@@ -682,7 +683,7 @@ const Paymentsteper = () => {
                             <Button onClick={handleComplete} disabled={!checked} > Next </Button>
                         )}
                         {activeStep === 2 && (
-                            <Button onClick={() => { sendRentCar() }}>Finish</Button>
+                            <Button disabled={!stepbtnThird}  onClick={() => { sendRentCar() }}>Finish</Button>
                         )}
 
 
