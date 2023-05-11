@@ -23,7 +23,7 @@ const Rentconfirmcontent = () => {
     const { data } = useFetch(
         `http://localhost:8800/api/car/getCarById/${id}`
     );
-    console.log(data);
+    // console.log(data);
   useEffect(() => {
     
   }, [data]);
@@ -32,7 +32,7 @@ const Rentconfirmcontent = () => {
     const { dataSearch } = location.state;
     const lang = location.pathname.split("/")[2];
     const { t} = useTranslation();
-  console.log(lang);
+//   console.log(lang);
 
     
 

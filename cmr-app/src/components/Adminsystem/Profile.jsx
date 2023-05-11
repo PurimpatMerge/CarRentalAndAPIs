@@ -14,6 +14,7 @@ import axios from "axios";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
 const Profile = () => {
 
   //get params 
@@ -286,7 +287,7 @@ const Profile = () => {
 
 
 
-
+  console.log(data?.username);
   return (
 
     <motion.div
@@ -336,6 +337,8 @@ const Profile = () => {
             <tr >
               <td className="sm:py-5 ">Username:</td>
               <td>
+             
+              <TextField name="username"  onChange={handleChangeUsername} label="Outlined" defaultValue={data?.username || ''} variant="outlined" />
                 <input
                   className={`border px-3 ${usernameErrorInput ? 'border-red-600' : 'border-gray-400'} border-gray-400 ${usernameErrorInput ? 'hover:border-red-400' : 'hover:border-blue-400'} duration-150  focus:outline-none focus:border-none ${usernameErrorInput ? 'focus:ring-red-600' : 'focus:ring-blue-500'}  block w-full focus:ring-1 bg-slate-100 py-4 rounded-md bg-opacity-40`}
                   onChange={handleChangeUsername}
