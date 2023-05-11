@@ -7,6 +7,7 @@ const CarInfoSchema = new mongoose.Schema(
     model: {
       type: String,
       required: true,
+      unique: false
     },
     brand: {
       type: String,

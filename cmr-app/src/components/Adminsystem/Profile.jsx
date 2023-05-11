@@ -309,7 +309,7 @@ const Profile = () => {
             setLoading(false);
           }, 2000);
         }
-        setAleartMsg('Edit profile was successfully!');
+        setAleartMsg('Update profile was successfully!');
         setAleartColor('success');
         setOpenAlert(true);
       }

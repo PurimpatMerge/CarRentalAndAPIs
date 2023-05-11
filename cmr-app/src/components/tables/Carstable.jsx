@@ -16,8 +16,18 @@ import axios from "axios";
 import useFetch from "../../hooks/useFetch";
 import Pagination from '@mui/material/Pagination';
 import AddIcon from "@mui/icons-material/Add";
-
-
+import { useRef } from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+//dialog
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { blue } from '@mui/material/colors';
 
 
 const Carstable = () => {
@@ -30,11 +40,16 @@ const Carstable = () => {
     setCars(data);
   }, [data]);
 
+  //loading btn
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const timer = useRef();
+  const [submitbtn, setSubmitbtn] = useState(false);
+  //delete car
+  const [confirmdelete, setConfirmDelete] = useState(false);
   const deleteThisCar = async (car) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
-    );
-    if (confirmDelete) {
+
+    if (confirmdelete === true) {
       try {
         const idDelete = car._id;
         console.log(idDelete);
@@ -42,13 +57,33 @@ const Carstable = () => {
           `http://localhost:8800/api/car/deleteThiscar/${idDelete}`
         );
         if (success) {
-          window.location.reload(false);
+          if (!loading) {
+            setSuccess(false);
+            setLoading(true);
+            setSubmitbtn(true)
+            timer.current = window.setTimeout(() => {
+              setSuccess(true);
+              setLoading(false);
+              setSubmitbtn(false)
+            }, 2000);
+          }
+          setAleartMsg('The car was added successfully!');
+          setAleartColor('success');
+
         }
       } catch (err) {
-        console.log(err);
+        setAleartMsg('There was an error while adding the car. Please try again later.');
+        setAleartColor('error');
+        setOpenAlert(true);
       }
     }
+    setOpenAlert(true);
   };
+  useEffect(() => {
+    setConfirmDelete(true);
+  }, [confirmdelete]);
+
+  //change status car
   const handleSwitchChange = async (event, car) => {
     cars.map(async (c) => {
       try {
@@ -76,8 +111,51 @@ const Carstable = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+
+  //dialog
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setConfirmDelete(false);
+  };
+
+  //Alert
+  const [alertmsg, setAleartMsg] = useState('');
+  const [alertcolor, setAleartColor] = useState('');
+  const [openalert, setOpenAlert] = useState(false);
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
+
+
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (success === true) {
+      window.location.reload(false);
+    }
+  }, [success]);
   return (
     <TableContainer className="w-full rounded-md ">
+      <Snackbar sx={{ zIndex: 9999 }} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openalert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity={alertcolor} sx={{ width: '100%' }}>
+          {alertmsg}
+        </Alert>
+      </Snackbar>
       <Table className="w-full border">
         <TableHead className="bg-gray-200 ">
           <TableRow>
@@ -96,10 +174,10 @@ const Carstable = () => {
             <TableCell >
               <div className="flex justify-center ">
                 <p className="my-auto mr-5">Action</p>
-              
-              <Link to="/Adminsystem1/Addcar">
-                <Button variant="contained"  color="success" endIcon={<AddIcon />}>Add</Button>
-              </Link>
+
+                <Link to="/Adminsystem1/Addcar">
+                  <Button variant="contained" color="success" endIcon={<AddIcon />}>Add</Button>
+                </Link>
               </div>
             </TableCell>
           </TableRow>
@@ -107,6 +185,49 @@ const Carstable = () => {
         <TableBody>
           {cars.slice(currentPage * 4, (currentPage + 1) * 4).map((car, index) => (
             <TableRow key={car._id} className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                BackdropProps={{
+                  style: { opacity: 0.5 },
+                }}
+                sx={{ zIndex: 9998 }}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {" Confirm Delete "}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete this car?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+
+                  <Box sx={{ m: 1, position: 'relative' }}>
+                    <Button disabled={submitbtn || loading} onClick={() => deleteThisCar(car)} autoFocus>
+                      Delete
+                    </Button>
+                    {loading && (
+                      <CircularProgress
+                        size={24}
+                        sx={{
+                          color: blue[500],
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          marginTop: '-12px',
+                          marginLeft: '-12px',
+                        }}
+                      />
+                    )}
+                  </Box>
+                </DialogActions>
+              </Dialog>
+
               <TableCell ><img className="object-contain w-60 h-32" src={car?.photos[0]} alt="car" /></TableCell>
               <TableCell >{car.model}</TableCell>
               <TableCell >{car.brand}</TableCell>
@@ -129,7 +250,7 @@ const Carstable = () => {
                   <Link to={`/Adminsystem1/Editcar/${car._id}`}><Button variant="text" >Edit</Button></Link>
                   <IconButton
                     aria-label="delete"
-                    onClick={() => deleteThisCar(car)}
+                    onClick={handleClickOpen}
                   >
                     <Delete className="text-red-500" />
                   </IconButton>
