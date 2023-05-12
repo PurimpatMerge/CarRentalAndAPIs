@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
@@ -80,7 +79,7 @@ const Sidebar = () => {
           onClick={() => setOpen(!open)}
         />
         <div className={`${!open && "hidden "} `}>
-          <Avatar sx={{ width: 120, height: 120 }} className="mx-auto " alt="Remy Sharp" src={''} />
+          <Avatar sx={{ width: 120, height: 120 }} className="mx-auto " alt="Remy Sharp" src={user.photos} />
         </div>
 
 

@@ -1,15 +1,12 @@
 import React, { useState, useEffect} from "react";
-
 import PaymentIcon from '@mui/icons-material/Payment';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from "react-router-dom";
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import profile from '../../img/profile1.jpg'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -78,7 +75,7 @@ const Sidebar = () => {
           onClick={() => setOpen(!open)}
         />
         <div className={`${!open && "hidden "} `}>
-          <Avatar sx={{ width: 120, height: 120 }} className="mx-auto " alt="Remy Sharp" src={profile} />
+          <Avatar sx={{ width: 120, height: 120 }} className="mx-auto " alt="Remy Sharp" src={user.photos} />
         </div>
 
 

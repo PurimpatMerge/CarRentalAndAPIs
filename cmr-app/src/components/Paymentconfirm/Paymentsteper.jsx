@@ -23,8 +23,10 @@ import { Checkbox } from '@mui/material';
 import qrcode from '../../img/qrcode.jpg'
 import axios from "axios";
 import { Image } from 'antd';
-
-
+//progress btn
+import CircularProgress from '@mui/material/CircularProgress';
+import { blue } from '@mui/material/colors';
+import { useRef } from 'react';
 
 const steps = ['Personal information', 'Rent confirmation', 'Payment'];
 
@@ -34,7 +36,9 @@ const Paymentsteper = () => {
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
 
-
+    //progress btn
+    const [loading, setLoading] = useState(false);
+    const timer = useRef();
 
     const totalSteps = () => {
         return steps.length;
@@ -276,6 +280,7 @@ const Paymentsteper = () => {
     }, [images]);
 
     const sendRentCar = async (e) => {
+        setLoading(true);
         const list = await Promise.all(
             Object.values(images).map(async (file) => {
                 const data = new FormData();
@@ -303,7 +308,12 @@ const Paymentsteper = () => {
         }
         const res = await axios.post("http://localhost:8800/api/rent/addrent", infoRentDetail);
         if (res) {
-            console.log(res.data);
+            if (!loading) {
+                setLoading(true);
+                timer.current = window.setTimeout(() => {
+                  setLoading(false);
+                }, 2000);
+              }
             handleComplete();
         }
     };
@@ -347,7 +357,7 @@ const Paymentsteper = () => {
                                                 <FormHelperText error>{emailError}</FormHelperText>
                                             </td>
                                             <td>
-                                                <TextField required  inputProps={{ maxLength: 10 }} error={phoneErrorInput} onChange={handleChangePhone} id="cphone" label="Phone Number" variant="standard" />
+                                                <TextField required inputProps={{ maxLength: 10 }} error={phoneErrorInput} onChange={handleChangePhone} id="cphone" label="Phone Number" variant="standard" />
                                                 <FormHelperText error>{phoneError}</FormHelperText>
                                             </td>
                                         </tr>
@@ -663,7 +673,7 @@ const Paymentsteper = () => {
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"
-                            disabled={activeStep === 0}
+                            disabled={activeStep === 0 || activeStep === 3}
                             onClick={handleBack}
                             sx={{ mr: 1 }}
                         >
@@ -683,7 +693,30 @@ const Paymentsteper = () => {
                             <Button onClick={handleComplete} disabled={!checked} > Next </Button>
                         )}
                         {activeStep === 2 && (
-                            <Button disabled={!stepbtnThird}  onClick={() => { sendRentCar() }}>Finish</Button>
+                            // <Button disabled={!stepbtnThird}  onClick={() => { sendRentCar() }}>Finish</Button>
+                            <>
+                                <Box sx={{ m: 1, position: 'relative' }}>
+                                    <Button
+                                        disabled={!stepbtnThird || loading}
+                                        onClick={() => sendRentCar()}
+                                    >
+                                        Finish
+                                    </Button>
+                                    {loading && (
+                                        <CircularProgress
+                                            size={24}
+                                            sx={{
+                                                color: blue[500],
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                marginTop: '-12px',
+                                                marginLeft: '-12px',
+                                            }}
+                                        />
+                                    )}
+                                </Box>
+                            </>
                         )}
 
 

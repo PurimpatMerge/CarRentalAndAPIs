@@ -67,12 +67,12 @@ const Carstable = () => {
               setSubmitbtn(false)
             }, 2000);
           }
-          setAleartMsg('The car was added successfully!');
+          setAleartMsg('The Car was Deleted!');
           setAleartColor('success');
 
         }
       } catch (err) {
-        setAleartMsg('There was an error while adding the car. Please try again later.');
+        setAleartMsg('There was an error while Deleting the Car. Please try again later.');
         setAleartColor('error');
         setOpenAlert(true);
       }
