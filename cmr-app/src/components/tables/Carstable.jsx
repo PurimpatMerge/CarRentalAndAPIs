@@ -241,6 +241,7 @@ const Carstable = () => {
               <TableCell >{car.price}</TableCell>
               <TableCell >
                 <Switch
+                  disabled={car.carRentStatus === "rented"}
                   checked={car.statusAble === "true" ? true : false}
                   onChange={(event) => handleSwitchChange(event, car)}
                 />

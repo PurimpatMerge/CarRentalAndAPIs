@@ -21,8 +21,6 @@ const Paymentstable = () => {
   const { data } = useFetch(
     "http://localhost:8800/api/rent/getallrent"
   );
-
-
   useEffect(() => {
 
   }, [data]);

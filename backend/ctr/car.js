@@ -92,6 +92,25 @@ export const updateStatusCar = async (req, res, next) => {
   }
 };
 
+export const updateStatusRentCar = async (req, res, next) => {
+  try {
+    const { id, carRentStatus } = req.body;
+
+    const updatedCar = await Car.findByIdAndUpdate(
+      id,
+      { carRentStatus },
+      { new: true }
+    );
+    if (!updatedCar) {
+      return res.status(404).json({ error: "Car not found" });
+    }
+
+    return res.status(200).json(updatedCar);
+  } catch (err) {
+    next("err");
+  }
+};
+
 export const editCarById = async (req, res, next) => {
   try {
     const newData = new Car({

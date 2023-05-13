@@ -227,10 +227,12 @@ const Employeestable = () => {
               <TableCell >{user.phone}</TableCell>
               <TableCell >{user.position}</TableCell>
               <TableCell >
+                <div  className={`${user.position === "Manager" ? 'hidden' : "block"}`}>
                 <Switch
                   checked={user.status === "true" ? true : false}
                   onChange={(event) => handleSwitchChange(event, user)}
                 />
+                </div>
               </TableCell>
               <TableCell className="p-2 ">
                 <div className="flex">

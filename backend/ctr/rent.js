@@ -59,7 +59,9 @@ export const getAllRentConfirm = async (req, res, next) => {
 
 export const getAllHistory = async (req, res, next) => {
   try {
-    const allRent = await Rent.find({ activestatus: { $in: ["History", "Rejected"] } });
+    const allRent = await Rent.find({
+      activestatus: { $in: ["History", "Rejected"] },
+    });
     const carIds = allRent.map((rent) => rent.carid);
     const cars = await Car.find({ _id: { $in: carIds } }).lean(); // add .lean() to get plain JavaScript objects instead of Mongoose documents
     const rentAndCarIds = allRent.map((rent) => ({
@@ -88,32 +90,56 @@ export const getRentById = async (req, res, next) => {
   }
 };
 
-
 export const distributionAndUpdateStatus = async (req, res, next) => {
   try {
+    const allUser = await User.find();
     const getCounter = await Work.find();
-    const idForCounter = getCounter[0]._id
-    // validation for distribution that not more than idgernate
-
-    const workerAdmin = parseInt(getCounter[0].distribution) + 1;
-    
+    const idForCounter = getCounter[0]._id;
+    let workerAdmin = parseInt(getCounter[0].distribution);
     let user;
-     user = await User.findOne({ idgenerate: workerAdmin });
-    //
-    if(!user){
-      user = await User.findOne({ idgenerate: 1 });
-      await Work.findByIdAndUpdate(idForCounter,   
-      { distribution: 1 },
-      { new: true } )
+
+    do {
+      workerAdmin += 1;
+      user = await User.findOne({ idgenerate: workerAdmin, status: true });
+      // console.log(user);
+      // console.log("work", workerAdmin);
+    } while (user === null && workerAdmin <= allUser.length);
+
+    if(workerAdmin <= allUser.length){
+      await Work.findByIdAndUpdate(
+        idForCounter,
+        { distribution: 0 },
+        { new: true }
+      );
     }
 
-    if(user){
-      await Work.findByIdAndUpdate(idForCounter,   
+    //user not found
+    if (user === null && workerAdmin > allUser.length) {
+      await Work.findByIdAndUpdate(
+        idForCounter,
+        { distribution: 0 },
+        { new: true }
+      );
+      // console.log("User not found and reset");
+    }
+    
+    //update work
+    if (user) {
+      await Work.findByIdAndUpdate(
+        idForCounter,
         { distribution: workerAdmin },
-        { new: true } )
+        { new: true }
+      );
+      if(workerAdmin === allUser.length){
+        await Work.findByIdAndUpdate(
+          idForCounter,
+          { distribution: 0 },
+          { new: true }
+        );
+      }
     }
-    const id = req.params.id; // get the ID from the URL parameter
 
+    const id = req.params.id; // get the ID from the URL parameter
     const updatedStatusAndResponse = await Rent.findByIdAndUpdate(
       id,
       { activestatus: "Confirmed", responsibilities: user.fname },
@@ -121,11 +147,11 @@ export const distributionAndUpdateStatus = async (req, res, next) => {
     );
 
     res.status(200).json(updatedStatusAndResponse);
-   
   } catch (err) {
     next(err);
   }
 };
+
 export const distributionAndUpdateStatusRejected = async (req, res, next) => {
   try {
     const fname = req.params.fname;
@@ -136,7 +162,6 @@ export const distributionAndUpdateStatusRejected = async (req, res, next) => {
       { new: true }
     );
     res.status(200).json(updatedStatusAndResponse);
-    
   } catch (err) {
     next(err);
   }
@@ -145,13 +170,17 @@ export const distributionAndUpdateStatusRejected = async (req, res, next) => {
 export const fineAndUpdateStatus = async (req, res, next) => {
   try {
     const id = req.params.id; // get the ID from the URL parameter
-  console.log(id,req.body);
-    const updatedStatusfine = await Rent.findByIdAndUpdate(id, { ...req.body, activestatus: "History" }, { new: true });
+    console.log(id, req.body);
+    const updatedStatusfine = await Rent.findByIdAndUpdate(
+      id,
+      { ...req.body, activestatus: "History" },
+      { new: true }
+    );
     if (!updatedStatusfine) {
-      return res.status(404).json({ error: 'fine not found' });
+      return res.status(404).json({ error: "fine not found" });
     }
 
-    return res.status(200).send('1');
+    return res.status(200).send("1");
   } catch (err) {
     next("err");
   }

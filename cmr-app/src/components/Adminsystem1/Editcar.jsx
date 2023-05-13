@@ -113,20 +113,19 @@ const Editcar = () => {
         }
     }, [engine]);
 
-    // validation price
     const validatePrice = useCallback(() => {
-        const regex = /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/;
+        const regex = /^\d+(\.\d{1,2})?$/;
         if (!price) {
-            setPriceError('Please enter a price');
-            setPriceErrorInput(true);
+          setPriceError('Please enter a price');
+          setPriceErrorInput(true);
         } else if (!regex.test(price)) {
-            setPriceError('Price should be a valid number in Thai Baht format (e.g. 10,000.00)');
-            setPriceErrorInput(true);
+          setPriceError('Price should be a valid number eg.(1000)');
+          setPriceErrorInput(true);
         } else {
-            setPriceError('');
-            setPriceErrorInput(false);
+          setPriceError('');
+          setPriceErrorInput(false);
         }
-    }, [price]);
+      }, [price]);
 
     //useEffect Validation
     useEffect(() => {

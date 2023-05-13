@@ -73,7 +73,7 @@ const Carlist = ({ selectedOptions }) => {
                                     </div>
                                     <div className="flex ml-1">
                                         <img src={engine} alt="engine" className='object-scale-down w-6 mb-6' />
-                                        <p className="ml-1 mt-1 text-xs">{cars.engine} cc.</p>
+                                        <p className="ml-1 mt-1 text-xs">{cars.engine}</p>
                                     </div>
                                     <div className="flex ">
                                         <img src={gear} alt="gear" className='object-scale-down w-5 mb-6' />

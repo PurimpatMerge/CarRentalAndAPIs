@@ -37,6 +37,10 @@ const RentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    totalprice: {
+      type: String,
+      required: true,
+    },
     carid: {
       type: String,
       required: true,

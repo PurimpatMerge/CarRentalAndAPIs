@@ -50,6 +50,10 @@ const CarInfoSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    carRentStatus: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
