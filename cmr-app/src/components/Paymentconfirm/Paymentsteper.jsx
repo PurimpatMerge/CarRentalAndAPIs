@@ -272,9 +272,6 @@ const Paymentsteper = () => {
     const savedDataSearch = localStorage.getItem('personalInfo');
     const dataSearchsecond = savedDataSearch ? JSON.parse(savedDataSearch) : null;
 
-
-
-
     //checked?
     const [checked, setChecked] = useState(false);
 

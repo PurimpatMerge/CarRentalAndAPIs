@@ -28,7 +28,7 @@ const Loginform = () => {
     try {
 
       const res = await axios.post("http://localhost:8800/api/auth/login", credentials);
-      console.log(res.data.position);
+      // console.log(res.data.position);
       if (res.data.position === "Manager") {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
         navigate("/Adminsystem");
