@@ -48,7 +48,7 @@ const Editcar = () => {
     const [engineError, setEngineError] = useState('');
     const [engineErrorInput, setEngineErrorInput] = useState(false);
     //validation price
-    const [price, setPrice] = useState('1,000');
+    const [price, setPrice] = useState('1000');
     const [priceError, setPriceError] = useState('');
     const [priceErrorInput, setPriceErrorInput] = useState(false);
 
@@ -113,6 +113,7 @@ const Editcar = () => {
         }
     }, [engine]);
 
+    // validation price
     const validatePrice = useCallback(() => {
         const regex = /^\d+(\.\d{1,2})?$/;
         if (!price) {
