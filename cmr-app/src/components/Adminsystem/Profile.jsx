@@ -290,16 +290,16 @@ const Profile = () => {
 
       // const mergePhoto = [];
       data.photos.push(...list)
-      console.log(data.photos);
+      // console.log(data.photos);
       const edituser = {
         photos: list,
         ...data,
         ...info
       }
-      // console.log(list);
-      // console.log(edituser);
+      // console.log('edit',edituser);
+      // console.log('list',list);
       const res = await axios.put("http://localhost:8800/api/auth/edituserbyid", edituser);
-
+     
       if (res) {
         if (!loading) {
           setSuccess(false);
