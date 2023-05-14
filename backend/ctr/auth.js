@@ -21,16 +21,17 @@ export const login = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
+      { id: user._id, isAdmin: user.isAdmin, position: user.position },
       process.env.JWT
     );
 
     const { password, isAdmin, ...otherDetails } = user._doc;
+    // console.log({...otherDetails});
     res.cookie("access_token", token, {
         httpOnly: true,
       })
       .status(200)
-      .json({ details: { ...otherDetails }, isAdmin });
+      .json({ details: { ...otherDetails }, isAdmin, position: user.position });
   } catch (err) {
     next(err);
   }
@@ -60,13 +61,13 @@ export const register = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const allUser = await User.find();
-    const userGetlenght = allUser.length  ;
+    const userGetlenght = allUser.length;
     const newUser = new User({
       ...req.body,
       password: hash,
       isAdmin: true,
-      status:"false",
-      idgenerate: userGetlenght
+      status: "false",
+      idgenerate: userGetlenght,
     });
 
     await newUser.save();
@@ -90,7 +91,7 @@ export const deleteThisUser = async (req, res, next) => {
   try {
     const deleteUser = await User.findByIdAndDelete(req.params.id);
     if (!deleteUser) {
-      return res.status(404).json({ error: 'Car not found' });
+      return res.status(404).json({ error: "Car not found" });
     }
     return res.status(200).json(deleteUser);
     // console.log("DeleteThisUser Test Api");
@@ -102,8 +103,7 @@ export const deleteThisUser = async (req, res, next) => {
 export const getUserById = async (req, res, next) => {
   try {
     const allUserbyid = await User.findById(req.params.id);
-     res.status(200).json(allUserbyid);
-    
+    res.status(200).json(allUserbyid);
   } catch (err) {
     next(err);
   }
@@ -114,14 +114,14 @@ export const getUserById = async (req, res, next) => {
 //     if (!user) {
 //       return res.status(404).json({ message: "User not found" });
 //     }
-    
+
 //     const isMatch = bcrypt.compareSync(req.body.password, user.password);
 //     if (isMatch) {
 //       console.log(`User's real password is: ${req.body.password}`);
 //     } else {
 //       console.log(`Provided password doesn't match the user's password`);
 //     }
-    
+
 //     res.status(200).json(user);
 //   } catch (err) {
 //     next(err);
@@ -130,15 +130,18 @@ export const getUserById = async (req, res, next) => {
 
 export const editUserById = async (req, res, next) => {
   try {
-   
-    const newData = new User({  
+    const newData = new User({
       ...req.body,
     });
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(newData.password, salt);
-    const updatedata = await User.findByIdAndUpdate(req.body._id, { $set: newData ,password: hash }, { new: true });
+    const updatedata = await User.findByIdAndUpdate(
+      req.body._id,
+      { $set: newData, password: hash },
+      { new: true }
+    );
     if (!updatedata) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     return res.status(200).json(updatedata);
   } catch (err) {
@@ -148,10 +151,11 @@ export const editUserById = async (req, res, next) => {
 
 export const deleteThisUserPhotos = async (req, res, next) => {
   try {
-    
-    const deletePhotos = await User.findByIdAndUpdate(req.params.id, { $set: {photos: []} });
+    const deletePhotos = await User.findByIdAndUpdate(req.params.id, {
+      $set: { photos: [] },
+    });
     if (!deletePhotos) {
-      return res.status(404).json({ error: 'Car not found' });
+      return res.status(404).json({ error: "Car not found" });
     }
     return res.status(200).json(deletePhotos);
   } catch (err) {
@@ -159,14 +163,17 @@ export const deleteThisUserPhotos = async (req, res, next) => {
   }
 };
 
-
 export const updateStatusUser = async (req, res, next) => {
   try {
     const { id, status } = req.body;
 
-    const updatedStatus = await User.findByIdAndUpdate(id, { status }, { new: true });
+    const updatedStatus = await User.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
     if (!updatedStatus) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     return res.status(200).json(updatedStatus);

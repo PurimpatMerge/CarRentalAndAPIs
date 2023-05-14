@@ -28,11 +28,12 @@ const Loginform = () => {
     try {
 
       const res = await axios.post("http://localhost:8800/api/auth/login", credentials);
-      if (res.data.isAdmin === true) {
+      console.log(res.data.position);
+      if (res.data.position === "Manager") {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
         navigate("/Adminsystem");
       }
-      else if (res.data.isAdmin === false) {
+      else if (res.data.position === "Sale") {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
         navigate("/Adminsystem1");
       }
