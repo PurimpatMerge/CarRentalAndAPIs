@@ -188,7 +188,7 @@ const Paymentsteper = () => {
 
     //validation email
     const validateEmail = useCallback(() => {
-        const regex = /^[a-z]+@[a-z]+\.[a-z]+$/i; // Fixed regex pattern
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (!email) {
             setEmailError('Please enter an email address');
